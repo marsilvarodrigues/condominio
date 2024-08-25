@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+
+  mail:
+    image: bytemark/smtp
+    container_name: email
+    ports:
+      - "25:25"
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: condominio
+      MYSQL_TCP_PORT: 3306
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf
+    restart: always
+
+
+volumes:
+  mysql-data:
