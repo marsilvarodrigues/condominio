@@ -7,14 +7,20 @@ import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 @DataJpaTest
-@ContextConfiguration(classes = CondominioApplication.class)
+@ContextConfiguration(classes = UsuarioRepository.class)
+@EnableJpaRepositories(basePackages = {"com.pmrodrigues.condominio.repositories"})
+@EntityScan("com.pmrodrigues.condominio.models")
 public class TestUsuarioRepository {
 
     @Autowired

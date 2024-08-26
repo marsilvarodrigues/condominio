@@ -15,6 +15,7 @@ import java.util.*;
 @Table(name="usuarios")
 @Getter
 @NoArgsConstructor
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Usuario implements UserDetails {
 
     @Id

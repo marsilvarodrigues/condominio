@@ -34,6 +34,14 @@
     </dependencies>
   </dependencyManagement>
 
+  <repositories>
+    <repository>
+      <id>jcenter</id>
+      <url>https://jcenter.bintray.com/</url>
+    </repository>
+  </repositories>
+
+
   <dependencies>
     <!-- Dependências do Spring Boot -->
     <dependency>
@@ -113,8 +121,6 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-
-
 
     <!-- Cucumber para Java -->
     <dependency>

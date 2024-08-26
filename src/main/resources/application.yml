@@ -40,5 +40,5 @@ management:
       show-details: always  # Exibe detalhes de saúde sempre que possível
 
 jwt:
-  secret: a15edc6f-dc3e-4a03-bb5c-7637eadde953
+  secret: ${SECRET_KEY:secretKey}
   expiration: 1200000

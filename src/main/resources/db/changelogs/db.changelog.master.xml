@@ -10,5 +10,9 @@
 
     <include file="user/1_create_user_table.sql" relativeToChangelogFile="true" />
     <include file="user/2_create_role_table.sql" relativeToChangelogFile="true" />
+    <include file="user/3_create_perfil_usuario.sql" relativeToChangelogFile="true" />
+    <include file="user/4_insert_role.sql" relativeToChangelogFile="true" />
+    <include file="user/5_create_morador_table.sql" relativeToChangelogFile="true" />
+    <include file="user/6_create_telefone_table.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
