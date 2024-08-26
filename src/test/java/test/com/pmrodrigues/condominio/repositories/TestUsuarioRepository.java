@@ -36,7 +36,23 @@ public class TestUsuarioRepository {
 
         assertThat(founded.get()).isEqualTo(usuario);
 
+    }
 
+    @Test
+    void testPesquisarPorUsername() {
+
+        Usuario usuario = new Usuario();
+        usuario.setUsername("username");
+        usuario.setPassword("123456");
+        usuario = usuarioRepository.save(usuario);
+
+        assertThat(usuario.getId()).isGreaterThan(0L);
+        assertThat(usuario.getGuid()).isNotNull();
+
+        val username = usuario.getUsername();
+        val founded = usuarioRepository.findByUsername(username);
+
+        assertThat(founded.get()).isEqualTo(usuario);
     }
 }
 
