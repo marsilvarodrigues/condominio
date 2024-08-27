@@ -1,7 +1,9 @@
 package com.pmrodrigues.condominio.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -16,7 +18,7 @@ public class Telefone {
     private Long id;
 
     @Column(name = "guid", unique = true, nullable = false)
-    private String guid = UUID.randomUUID().toString();
+    private final String guid = UUID.randomUUID().toString();
 
     @EqualsAndHashCode.Include
     @Column(name = "numero", nullable = false)

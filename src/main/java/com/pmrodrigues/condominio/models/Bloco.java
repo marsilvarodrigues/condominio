@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.With;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +35,7 @@ public class Bloco {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "bloco_id", referencedColumnName = "id")
-    private Set<Apartamento> apartamentos = new HashSet<>();
+    private final Set<Apartamento> apartamentos = new HashSet<>();
 
     @JoinColumn(name = "condominio_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

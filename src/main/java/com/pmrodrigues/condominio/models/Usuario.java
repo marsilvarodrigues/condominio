@@ -1,7 +1,10 @@
 package com.pmrodrigues.condominio.models;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
@@ -47,14 +50,14 @@ public class Usuario implements UserDetails {
     private LocalDateTime updatedDate;
 
     @Column(name = "enable" , nullable = false)
-    private boolean enabled = Boolean.TRUE;
+    private final boolean enabled = Boolean.TRUE;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "perfis_usuarios" ,
             joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "perfil_id" , referencedColumnName = "id")
     )
-    private Set<Perfil> perfis = new HashSet<>();
+    private final Set<Perfil> perfis = new HashSet<>();
 
     @PrePersist
     public void preInsert() {

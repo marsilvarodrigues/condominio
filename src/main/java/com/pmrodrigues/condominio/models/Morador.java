@@ -32,7 +32,7 @@ public class Morador extends Usuario{
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "morador_id", referencedColumnName = "id")
-    private Set<Telefone> telefones = new HashSet<>();
+    private final Set<Telefone> telefones = new HashSet<>();
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @Setter

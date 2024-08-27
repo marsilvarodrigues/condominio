@@ -3,9 +3,7 @@ package com.pmrodrigues.condominio.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -30,7 +28,7 @@ public class Perfil implements GrantedAuthority {
             inverseJoinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
             joinColumns = @JoinColumn(name = "perfil_id" , referencedColumnName = "id")
     )
-    private Set<Usuario> usuarios = new HashSet<>();
+    private final Set<Usuario> usuarios = new HashSet<>();
 
     @PrePersist
     public void preInsert() {

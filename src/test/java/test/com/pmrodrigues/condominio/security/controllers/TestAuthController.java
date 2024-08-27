@@ -2,10 +2,6 @@ package test.com.pmrodrigues.condominio.security.controllers;
 
 import com.pmrodrigues.condominio.security.controller.AuthController;
 import com.pmrodrigues.condominio.security.dto.JwtResponse;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import lombok.val;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,12 +15,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.testcontainers.shaded.com.trilead.ssh2.crypto.Base64;
 
-import java.util.Date;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -37,9 +30,9 @@ public class TestAuthController {
     @InjectMocks
     private AuthController authController;
 
-    private String secretKey = RandomStringUtils.randomAlphanumeric(128);
+    private final String secretKey = RandomStringUtils.randomAlphanumeric(128);
 
-    private long validityInMilliseconds = 3600000; // 1 hour
+    private final long validityInMilliseconds = 3600000; // 1 hour
 
     @BeforeEach
     void beforeEach() {
