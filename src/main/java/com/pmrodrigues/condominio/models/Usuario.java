@@ -24,7 +24,7 @@ public class Usuario implements UserDetails {
 
     @Column(name = "guid", unique = true, nullable = false)
     @Setter(AccessLevel.PRIVATE)
-    private String guid;
+    private String guid =  UUID.randomUUID().toString();
 
     @Column(name = "user_name", unique = true, length = 20, nullable = false)
     @Setter
@@ -61,7 +61,6 @@ public class Usuario implements UserDetails {
         this.password =  new BCryptPasswordEncoder().encode(this.password);
         this.createdDate = LocalDateTime.now();
         this.updatedDate = this.createdDate;
-        this.guid = UUID.randomUUID().toString();
     }
 
     @PreUpdate

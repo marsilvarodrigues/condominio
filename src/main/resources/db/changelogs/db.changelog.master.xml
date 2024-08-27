@@ -14,5 +14,9 @@
     <include file="user/4_insert_role.sql" relativeToChangelogFile="true" />
     <include file="user/5_create_morador_table.sql" relativeToChangelogFile="true" />
     <include file="user/6_create_telefone_table.sql" relativeToChangelogFile="true" />
+    <include file="user/7_create_table_condominio.sql" relativeToChangelogFile="true" />
+    <include file="user/8_create_table_blocos.sql" relativeToChangelogFile="true" />
+    <include file="user/9_create_table_apartamentos.sql" relativeToChangelogFile="true" />
+    <include file="user/10_alter_table_morador_add_apartamento_id.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

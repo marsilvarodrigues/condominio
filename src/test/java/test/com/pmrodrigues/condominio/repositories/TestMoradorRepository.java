@@ -1,7 +1,7 @@
 package test.com.pmrodrigues.condominio.repositories;
 
-import com.pmrodrigues.condominio.models.Morador;
-import com.pmrodrigues.condominio.models.Telefone;
+import com.pmrodrigues.condominio.models.*;
+import com.pmrodrigues.condominio.repositories.CondominioRepository;
 import com.pmrodrigues.condominio.repositories.MoradorRepository;
 import com.pmrodrigues.condominio.repositories.UsuarioRepository;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -28,6 +28,9 @@ public class TestMoradorRepository {
     @Autowired
     private MoradorRepository moradorRepository;
 
+    @Autowired
+    private CondominioRepository condominioRepository;
+
     @BeforeEach
     public void setUp() {
         // Limpar a base de dados ou adicionar dados de teste
@@ -40,9 +43,33 @@ public class TestMoradorRepository {
         morador.setCpf("12345678900");
         morador.setUsername("username");
         morador.setPassword("password");
+        morador.setApartamento(this.getApartamento());
 
         moradorRepository.save(morador);
     }
+
+    private Apartamento getApartamento() {
+        Condominio condominio = new Condominio();
+        condominio.setNome("Condomínio Jardim das Flores");
+        condominio.setQuantidadeBlocos(5L);
+
+        Bloco bloco = new Bloco();
+        bloco.setNome("Bloco A");
+        bloco.setNumero("101");
+        bloco.setQuantidadeApartamento(10L);
+
+        Apartamento apartamento = new Apartamento();
+        apartamento.setNumero("101");
+        apartamento.setAndar(1L);
+        bloco.adicionarApartamento(apartamento);
+
+        condominio.adicionarBloco(bloco);
+
+        condominioRepository.save(condominio);
+        return apartamento;
+    }
+
+
 
     @Test
     public void testFindByCpf() {
@@ -68,6 +95,7 @@ public class TestMoradorRepository {
         morador.setCpf("98765432100");
         morador.setUsername("username2");
         morador.setPassword("password");
+        morador.setApartamento(this.getApartamento());
         moradorRepository.save(morador);
 
         Optional<Morador> foundMorador = moradorRepository.findByGuid(morador.getGuid());
@@ -89,6 +117,7 @@ public class TestMoradorRepository {
         morador.setCpf(RandomStringUtils.randomNumeric(11));
         morador.setUsername("username_2");
         morador.setPassword("password");
+        morador.setApartamento(this.getApartamento());
 
         moradorRepository.save(morador);
 
@@ -119,6 +148,7 @@ public class TestMoradorRepository {
         morador.setCpf(RandomStringUtils.randomNumeric(11));
         morador.setUsername("username_3");
         morador.setPassword("password");
+        morador.setApartamento(this.getApartamento());
 
         moradorRepository.save(morador);
 
