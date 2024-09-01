@@ -1,10 +1,7 @@
 package com.pmrodrigues.condominio.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +16,7 @@ import java.util.*;
 @Getter
 @NoArgsConstructor
 @Inheritance(strategy=InheritanceType.JOINED)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario implements UserDetails {
 
     @Id
@@ -27,6 +25,7 @@ public class Usuario implements UserDetails {
 
     @Column(name = "guid", unique = true, nullable = false)
     @Setter(AccessLevel.PRIVATE)
+    @EqualsAndHashCode.Include
     private String guid =  UUID.randomUUID().toString();
 
     @Column(name = "user_name", unique = true, length = 20, nullable = false)

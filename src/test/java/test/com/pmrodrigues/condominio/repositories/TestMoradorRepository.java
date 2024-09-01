@@ -5,7 +5,6 @@ import com.pmrodrigues.condominio.repositories.CondominioRepository;
 import com.pmrodrigues.condominio.repositories.MoradorRepository;
 import com.pmrodrigues.condominio.repositories.UsuarioRepository;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -15,7 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.UUID;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,10 +30,7 @@ public class TestMoradorRepository {
     @Autowired
     private CondominioRepository condominioRepository;
 
-    @BeforeEach
-    public void setUp() {
-        // Limpar a base de dados ou adicionar dados de teste
-        moradorRepository.deleteAll();
+    private Morador getMorador() {
 
         Morador morador = new Morador();
         morador.setNome("João da Silva");
@@ -46,6 +42,7 @@ public class TestMoradorRepository {
         morador.setApartamento(this.getApartamento());
 
         moradorRepository.save(morador);
+        return morador;
     }
 
     private Apartamento getApartamento() {
@@ -73,6 +70,7 @@ public class TestMoradorRepository {
 
     @Test
     public void testFindByCpf() {
+        this.getMorador();
         Optional<Morador> morador = moradorRepository.findByCpf("12345678900");
         assertThat(morador).isPresent();
         assertThat(morador.get().getNome()).isEqualTo("João da Silva");
@@ -80,6 +78,7 @@ public class TestMoradorRepository {
 
     @Test
     public void testFindByEmail() {
+        this.getMorador();
         Optional<Morador> morador = moradorRepository.findByEmail("joao.silva@example.com");
         assertThat(morador).isPresent();
         assertThat(morador.get().getNome()).isEqualTo("João da Silva");

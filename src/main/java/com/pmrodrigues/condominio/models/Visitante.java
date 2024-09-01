@@ -5,14 +5,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Table(name = "visitantes")
 @Entity
-@Table(name = "apartamentos")
 @Getter
-public class Apartamento {
+public class Visitante {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,21 +21,20 @@ public class Apartamento {
     @Setter(AccessLevel.PRIVATE)
     private String guid =  UUID.randomUUID().toString();
 
+    @Column(name = "nome_do_visitante", nullable = false)
     @Setter
-    @Column(name = "numero")
-    private String numero;
+    private String nome;
 
-    @Setter
-    @Column(name = "andar")
-    private Long andar;
-
-    @JoinColumn(name = "bloco_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @Setter
-    private Bloco bloco;
+    @JoinColumn(name="apartamento_id", referencedColumnName = "id")
+    private Apartamento apartamento;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "apartamento_id", referencedColumnName = "id")
-    private Set<Morador> moradores = new HashSet<>();
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="data_visita")
+    @Setter
+    private LocalDateTime dataVisita = LocalDateTime.now();
+
+
 
 }
