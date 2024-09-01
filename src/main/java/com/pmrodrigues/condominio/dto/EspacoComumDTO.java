@@ -10,7 +10,10 @@ public record EspacoComumDTO(
         String descricao,
         Integer capacidadeMaxima) {
 
-    public static EspacoComumDTO fromEspacoComum(@NonNull EspacoComum espacoComum) {
-        return new EspacoComumDTO(espacoComum.getGuid(), espacoComum.getNome(), espacoComum.getDescricao(), espacoComum.getCapacidadeMaxima());
+    public static EspacoComumDTO fromEspacoComum(EspacoComum espacoComum) {
+        if( espacoComum != null ) {
+            return new EspacoComumDTO(espacoComum.getGuid(), espacoComum.getNome(), espacoComum.getDescricao(), espacoComum.getCapacidadeMaxima());
+        }
+        return null;
     }
 }
