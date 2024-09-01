@@ -38,7 +38,7 @@ jobs:
 
 
     - name: Build with Maven
-      run: mvn clean test install --no-transfer-progress
+      run: mvn clean install --no-transfer-progress
 
     - name: Run unit tests
       run: mvn test --no-transfer-progress  # Isso força a execução dos testes se não forem executados com o package
