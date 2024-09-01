@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="uuid"  value="uuid()" dbms="mysql"/>
+
+    <include file="ddl/1_create_user_table.sql" relativeToChangelogFile="true" />
+    <include file="ddl/2_create_role_table.sql" relativeToChangelogFile="true" />
+    <include file="ddl/3_create_perfil_usuario.sql" relativeToChangelogFile="true" />
+    <include file="dml/4_insert_role.sql" relativeToChangelogFile="true" />
+    <include file="ddl/5_create_morador_table.sql" relativeToChangelogFile="true" />
+    <include file="ddl/6_create_telefone_table.sql" relativeToChangelogFile="true" />
+    <include file="ddl/7_create_table_condominio.sql" relativeToChangelogFile="true" />
+    <include file="ddl/8_create_table_blocos.sql" relativeToChangelogFile="true" />
+    <include file="ddl/9_create_table_apartamentos.sql" relativeToChangelogFile="true" />
+    <include file="ddl/10_alter_table_morador_add_apartamento_id.sql" relativeToChangelogFile="true" />
+    <include file="ddl/11_create_visitante_table.sql" relativeToChangelogFile="true" />
+    <include file="ddl/12_create_table_espaco_comum.sql" relativeToChangelogFile="true" />
+    <include file="ddl/13_create_table_reserva.sql" relativeToChangelogFile="true" />
+    <include file="dml/14_insert_condominio.sql" relativeToChangelogFile="true" />
+    <include file="dml/15_insert_blocos.sql" relativeToChangelogFile="true" />
+    <include file="dml/16_insert_apartamento.sql" relativeToChangelogFile="true" />
+    <include file="dml/17_insert_espaco_comum.sql" relativeToChangelogFile="true" />
+
+</databaseChangeLog>

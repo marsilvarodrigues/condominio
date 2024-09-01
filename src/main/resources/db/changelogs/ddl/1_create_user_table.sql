@@ -1,0 +1,11 @@
+CREATE TABLE usuarios (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    guid CHAR(36) NOT NULL,
+    user_name VARCHAR(20) NOT NULL,
+    password VARCHAR(200) NOT NULL,
+    enable TINYINT(1) DEFAULT 1 NOT NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    UNIQUE KEY ux_guid_usuarios (guid),
+    UNIQUE KEY ux_user_name_usuarios (user_name)
+);
