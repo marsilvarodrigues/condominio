@@ -2,7 +2,6 @@ package test.com.pmrodrigues.condominio.services;
 
 import com.pmrodrigues.condominio.dto.EspacoComumDTO;
 import com.pmrodrigues.condominio.dto.ReservaRequestDTO;
-import com.pmrodrigues.condominio.dto.ReservaResponseDTO;
 import com.pmrodrigues.condominio.enums.StatusReserva;
 import com.pmrodrigues.condominio.exceptions.AlteracaoNaoPermitadaException;
 import com.pmrodrigues.condominio.exceptions.EspacoBloqueadoParaException;
@@ -252,7 +251,7 @@ public class TestReservaService {
         when(espacoComumRepository.findByGuid(any(String.class))).thenReturn(Optional.of(espacoComum));
         when(reservaRepository.findByEspacoComum(any(EspacoComum.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(reservas);
 
-        val founded = reservaService.pesquisarReservasPorEspacoComum(new EspacoComumDTO(UUID.randomUUID().toString(), null, null, 10L));
+        val founded = reservaService.pesquisarReservasPorEspacoComum(new EspacoComumDTO(UUID.randomUUID().toString(), null, null, 10));
         assertThat(founded).isNotNull();
 
     }

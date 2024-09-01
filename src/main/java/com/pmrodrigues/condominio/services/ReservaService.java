@@ -130,7 +130,7 @@ public class ReservaService {
 
     public List<ReservaResponseDTO> pesquisarReservasPorEspacoComum(@NonNull EspacoComumDTO espacoComumDTO) {
 
-        val espacoComumn = espacoComumRepository.findByGuid(espacoComumDTO.espacoComumId())
+        val espacoComumn = espacoComumRepository.findByGuid(espacoComumDTO.guid())
                 .orElseThrow(EspacoComumNotFoundException::new);
 
         val hoje = LocalDate.now();

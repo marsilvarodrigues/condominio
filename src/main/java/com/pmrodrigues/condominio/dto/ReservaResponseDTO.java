@@ -6,12 +6,12 @@ import lombok.NonNull;
 
 import java.time.LocalDate;
 
-public record ReservaResponseDTO(String reservaId, EspacoComumResponseDTO espacaoComum, MoradorResponseDTO morador, LocalDate dataReserva,
+public record ReservaResponseDTO(String reservaId, EspacoComumDTO espacaoComum, MoradorResponseDTO morador, LocalDate dataReserva,
                                  StatusReserva statusReserva) {
 
     public static ReservaResponseDTO fromReserva(@NonNull Reserva reserva) {
         return new ReservaResponseDTO(reserva.getGuid(),
-                EspacoComumResponseDTO.fromEspacoComum(reserva.getEspacoComum()),
+                EspacoComumDTO.fromEspacoComum(reserva.getEspacoComum()),
                 MoradorResponseDTO.fromMorador(reserva.getMorador()),
                 reserva.getDataReserva(),
                 reserva.getStatusReserva());
