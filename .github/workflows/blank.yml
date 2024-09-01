@@ -32,9 +32,11 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name: Build with Maven
+      working-directory: ./condominio
       run: mvn clean install
 
     - name: Run unit tests
+      working-directory: ./condominio 
       run: mvn test
 
     - name: Test Report
