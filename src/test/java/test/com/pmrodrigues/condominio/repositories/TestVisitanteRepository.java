@@ -1,17 +1,19 @@
 package test.com.pmrodrigues.condominio.repositories;
 
-import com.pmrodrigues.condominio.models.Apartamento;
-import com.pmrodrigues.condominio.models.Bloco;
-import com.pmrodrigues.condominio.models.Condominio;
-import com.pmrodrigues.condominio.models.Visitante;
+import com.pmrodrigues.condominio.models.*;
 import com.pmrodrigues.condominio.repositories.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,9 +36,27 @@ public class TestVisitanteRepository {
     @Autowired
     private VisitanteRepository visitanteRepository;
 
-    @Test
-    void testFindByGuid() {
+    @Autowired
+    private MoradorRepository moradorRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    private Morador getMorador() {
+
+        Morador morador = new Morador();
+        morador.setNome("João da Silva");
+        morador.setDataNascimento(LocalDate.of(1990, 1, 1));
+        morador.setEmail("joao.silva@example.com");
+        morador.setCpf("12345678900");
+        morador.setUsername("morador");
+        morador.setPassword("password");
+        morador.setApartamento(this.getApartamento());
+
+        return moradorRepository.save(morador);
+    }
+
+    private Apartamento getApartamento() {
         Condominio condominio = new Condominio();
         condominio.setNome("Condomínio Jardim das Flores");
         condominio.setQuantidadeBlocos(5L);
@@ -54,13 +74,28 @@ public class TestVisitanteRepository {
         condominio.adicionarBloco(bloco);
 
         condominioRepository.save(condominio);
+        return apartamento;
+    }
+
+    private Usuario getUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.setUsername("porteiro");
+        usuario.setPassword("123456");
+        return usuarioRepository.save(usuario);
+    }
+
+    @Test
+    void testFindByGuid() {
+
+        val morador = this.getMorador();
 
         Visitante visitante = new Visitante();
         visitante.setNome("João da Silva");
-        visitante.setApartamento(apartamento);
+        visitante.setApartamento(morador.getApartamento());
+        visitante.setAutorizadoPor(morador);
+        visitante.setRegistradoPor(this.getUsuario());
 
         visitanteRepository.save(visitante);
-
 
         String guid = visitante.getGuid();
 
@@ -69,6 +104,8 @@ public class TestVisitanteRepository {
 
         assertThat(found).isPresent();
         assertThat(found.get().getNome()).isEqualTo("João da Silva");
+        assertThat(found.get().getRegistradoPor()).isEqualTo(visitante.getRegistradoPor());
+        assertThat(found.get().getAutorizadoPor()).isEqualTo(visitante.getAutorizadoPor());
 
     }
 

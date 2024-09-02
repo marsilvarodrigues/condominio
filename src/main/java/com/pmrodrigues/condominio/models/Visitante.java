@@ -3,6 +3,7 @@ package com.pmrodrigues.condominio.models;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,24 @@ public class Visitante {
     @Setter
     private LocalDateTime dataVisita = LocalDateTime.now();
 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Setter
+    @JoinColumn(name = "registrado_por_id", referencedColumnName = "id")
+    private Usuario registradoPor;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @Setter
+    @JoinColumn(name = "autorizado_por_id", referencedColumnName = "id")
+    private Morador autorizadoPor;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "visitante")
+    @JoinColumn(name = "visitante_id", referencedColumnName = "id")
+    private Veiculo veiculo;
+
+    public void adicionaVeiculo(@NonNull Veiculo veiculo) {
+        this.veiculo = veiculo;
+        veiculo.setVisitante(this);
+    }
 
 
 }
