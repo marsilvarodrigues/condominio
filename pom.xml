@@ -145,6 +145,11 @@
       <version>${lombok.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.datatype</groupId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
+      <version>2.15.2</version> <!-- Certifique-se de usar a mesma versão do Jackson core -->
+    </dependency>
   </dependencies>
 
   <build>

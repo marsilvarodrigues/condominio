@@ -112,22 +112,6 @@ public class ReservaService {
         throw new ReservaNotFoundException();
     }
 
-    private void espacoComumJaReservado(@NonNull ReservaRequestDTO reservaDTO, EspacoComum espacoComumn) {
-        val reserva = reservaRepository.findByEspacoComumDataReserva(espacoComumn, reservaDTO.dataReserva(), StatusReserva.RESERVADO);
-        if( reserva.isPresent() ) throw new EspacoBloqueadoParaException();
-    }
-
-    private void moradorEstourouAQuantidadeDeReservasPermitidas(Morador morador) {
-        val quantidadeDeReservasAtivas = reservaRepository.quantasReservasAtivasExistemParaOMorador(morador);
-        if( quantidadeDeReservasAtivas >= 2) throw new EstouroDeReservasAtivasException();
-    }
-
-    private void estaDentroDoPeriodoParaReserva(@NonNull LocalDate dataIncial, @NonNull LocalDate dataFinal) {
-
-        val horasDeAntecedencia = ChronoUnit.DAYS.between(dataIncial, dataFinal);
-        if( horasDeAntecedencia < 1 ) throw new ForaDoPrazoParaReservarException();
-    }
-
     public List<ReservaResponseDTO> pesquisarReservasPorEspacoComum(@NonNull EspacoComumDTO espacoComumDTO) {
 
         val espacoComumn = espacoComumRepository.findByGuid(espacoComumDTO.guid())
@@ -142,5 +126,21 @@ public class ReservaService {
                 .map(ReservaResponseDTO::fromReserva)
                 .collect(Collectors.toList());
 
+    }
+
+    private void espacoComumJaReservado(@NonNull ReservaRequestDTO reservaDTO, EspacoComum espacoComumn) {
+        val reserva = reservaRepository.findByEspacoComumDataReserva(espacoComumn, reservaDTO.dataReserva(), StatusReserva.RESERVADO);
+        if( reserva.isPresent() ) throw new EspacoBloqueadoParaException();
+    }
+
+    private void moradorEstourouAQuantidadeDeReservasPermitidas(Morador morador) {
+        val quantidadeDeReservasAtivas = reservaRepository.quantasReservasAtivasExistemParaOMorador(morador);
+        if( quantidadeDeReservasAtivas >= 2) throw new EstouroDeReservasAtivasException();
+    }
+
+    private void estaDentroDoPeriodoParaReserva(@NonNull LocalDate dataIncial, @NonNull LocalDate dataFinal) {
+
+        val horasDeAntecedencia = ChronoUnit.DAYS.between(dataIncial, dataFinal);
+        if( horasDeAntecedencia < 1 ) throw new ForaDoPrazoParaReservarException();
     }
 }
