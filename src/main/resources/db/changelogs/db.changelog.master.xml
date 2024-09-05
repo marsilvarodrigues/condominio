@@ -25,5 +25,8 @@
     <include file="dml/15_insert_blocos.sql" relativeToChangelogFile="true" />
     <include file="dml/16_insert_apartamento.sql" relativeToChangelogFile="true" />
     <include file="dml/17_insert_espaco_comum.sql" relativeToChangelogFile="true" />
+    <include file="ddl/18_alter_table_visitante_add_porteiro_id.sql" relativeToChangelogFile="true" />
+    <include file="ddl/19_create_table_veiculo_do_visitante.sql" relativeToChangelogFile="true" />
+    <include file="ddl/20_alter_table_veiculo_do_visitante.sql" relativeToChangelogFile="true" />
 
 </databaseChangeLog>
