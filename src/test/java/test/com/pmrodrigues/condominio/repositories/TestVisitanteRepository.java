@@ -5,6 +5,7 @@ import com.pmrodrigues.condominio.repositories.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.val;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -12,10 +13,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDate;
+import java.util.IntSummaryStatistics;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.IntStream;
 
+import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -79,7 +85,7 @@ public class TestVisitanteRepository {
 
     private Usuario getUsuario() {
         Usuario usuario = new Usuario();
-        usuario.setUsername("porteiro");
+        usuario.setUsername(format("porteiro %s", RandomUtils.nextInt(1,100000)));
         usuario.setPassword("123456");
         return usuarioRepository.save(usuario);
     }
@@ -114,6 +120,65 @@ public class TestVisitanteRepository {
         // Testar a busca por GUID inexistente
         Optional<Apartamento> found = apartamentoRepository.findByGuid("non-existing-guid");
         assertThat(found).isNotPresent();
+    }
+
+    @Test
+    void testAddAVeiculoDoVisitante() {
+        val morador = this.getMorador();
+
+        Visitante visitante = new Visitante();
+        visitante.setNome("João da Silva");
+        visitante.setApartamento(morador.getApartamento());
+        visitante.setAutorizadoPor(morador);
+        visitante.setRegistradoPor(this.getUsuario());
+
+        Veiculo veiculo = new Veiculo();
+        veiculo.setCor("BRANCO");
+        veiculo.setModelo("FIT");
+        veiculo.setPlaca("LRH6605");
+        veiculo.setFabricante("Honda");
+        visitante.adicionaVeiculo(veiculo);
+
+        visitanteRepository.save(visitante);
+
+        String guid = visitante.getGuid();
+
+        // Testar a busca por GUID
+        Optional<Visitante> found = visitanteRepository.findByGuid(guid);
+        assertThat(found.get().getVeiculo()).isNotNull();
+        assertThat(found.get().getVeiculo().getCor()).isNotNull();
+        assertThat(found.get().getVeiculo().getPlaca()).isNotNull();
+        assertThat(found.get().getVeiculo().getModelo()).isNotNull();
+        assertThat(found.get().getVeiculo().getFabricante()).isNotNull();
+
+    }
+
+    @Test
+    void testDevePesquisarVisitasPorApartamento() {
+
+        val morador = this.getMorador();
+        IntStream.range(1, 11)
+                .forEach( i -> {
+                        Visitante visitante = new Visitante();
+                        visitante.setNome(format("João %s", i));
+                        visitante.setApartamento(morador.getApartamento());
+                        visitante.setAutorizadoPor(morador);
+                        visitante.setRegistradoPor(this.getUsuario());
+
+                        Veiculo veiculo = new Veiculo();
+                        veiculo.setCor("BRANCO");
+                        veiculo.setModelo("FIT");
+                        veiculo.setPlaca("LRH6605");
+                        veiculo.setFabricante("Honda");
+                        visitante.adicionaVeiculo(veiculo);
+
+                        visitanteRepository.save(visitante);
+                });
+
+        List<Visitante> visitantes = visitanteRepository.findByApartamento(morador.getApartamento());
+        assertThat(visitantes.isEmpty()).isFalse();
+        assertThat(visitantes.size()).isEqualTo(10);
+
     }
 
 

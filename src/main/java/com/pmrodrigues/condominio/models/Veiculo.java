@@ -29,12 +29,19 @@ public class Veiculo {
     private Visitante visitante;
 
     @Column(name = "modelo", nullable = false)
+    @Setter
     private String modelo;
 
     @Column(name = "cor", nullable = false)
+    @Setter
     private String cor;
 
     @Column(name = "placa", nullable = false)
+    @Setter
     private String placa;
+
+    @Column(name="fabricante", nullable = false)
+    @Setter
+    private String fabricante;
 
 }
