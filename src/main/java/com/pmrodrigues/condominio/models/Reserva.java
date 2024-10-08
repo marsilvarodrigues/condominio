@@ -2,10 +2,7 @@ package com.pmrodrigues.condominio.models;
 
 import com.pmrodrigues.condominio.enums.StatusReserva;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -14,6 +11,9 @@ import java.util.UUID;
 @Table(name = "reservas")
 @Getter
 @ToString(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

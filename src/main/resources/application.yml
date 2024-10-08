@@ -24,6 +24,11 @@ spring:
     database:
       replace: none
 
+  mail:
+    host: localhost
+    port: 25
+    protocol: smtp
+
 logging:
   level:
     root: INFO

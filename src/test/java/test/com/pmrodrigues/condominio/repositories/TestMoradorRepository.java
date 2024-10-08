@@ -1,9 +1,11 @@
 package test.com.pmrodrigues.condominio.repositories;
 
+
 import com.pmrodrigues.condominio.models.*;
 import com.pmrodrigues.condominio.repositories.CondominioRepository;
 import com.pmrodrigues.condominio.repositories.MoradorRepository;
 import com.pmrodrigues.condominio.repositories.UsuarioRepository;
+import lombok.val;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.util.Optional;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static test.com.pmrodrigues.condominio.utils.GeradorCPF.gerarCPF;
 
 @DataJpaTest
 @ContextConfiguration(classes = UsuarioRepository.class)
@@ -30,16 +33,18 @@ public class TestMoradorRepository {
     @Autowired
     private CondominioRepository condominioRepository;
 
+
     private Morador getMorador() {
 
-        Morador morador = new Morador();
-        morador.setNome("João da Silva");
-        morador.setDataNascimento(LocalDate.of(1990, 1, 1));
-        morador.setEmail("joao.silva@example.com");
-        morador.setCpf("12345678900");
-        morador.setUsername("username");
-        morador.setPassword("password");
-        morador.setApartamento(this.getApartamento());
+        Morador morador = Morador.builder()
+                .nome("João da Silva")
+                .dataNascimento(LocalDate.of(1990, 1, 1))
+                .email("joao.silva@example.com")
+                .cpf(gerarCPF())
+                .username("username")
+                .password("password")
+                .apartamento(this.getApartamento())
+                .build();
 
         moradorRepository.save(morador);
         return morador;
@@ -70,8 +75,8 @@ public class TestMoradorRepository {
 
     @Test
     public void testFindByCpf() {
-        this.getMorador();
-        Optional<Morador> morador = moradorRepository.findByCpf("12345678900");
+        val saved = this.getMorador();
+        Optional<Morador> morador = moradorRepository.findByCpf(saved.getCpf());
         assertThat(morador).isPresent();
         assertThat(morador.get().getNome()).isEqualTo("João da Silva");
     }
@@ -91,7 +96,7 @@ public class TestMoradorRepository {
         morador.setNome("Maria Oliveira");
         morador.setDataNascimento(LocalDate.of(1985, 5, 15));
         morador.setEmail("maria.oliveira@example.com");
-        morador.setCpf("98765432100");
+        morador.setCpf(gerarCPF());
         morador.setUsername("username2");
         morador.setPassword("password");
         morador.setApartamento(this.getApartamento());
@@ -113,7 +118,7 @@ public class TestMoradorRepository {
         morador.setNome("João da Silva");
         morador.setDataNascimento(LocalDate.of(1990, 1, 1));
         morador.setEmail("joao.silva_2@example.com");
-        morador.setCpf(RandomStringUtils.randomNumeric(11));
+        morador.setCpf(gerarCPF());
         morador.setUsername("username_2");
         morador.setPassword("password");
         morador.setApartamento(this.getApartamento());
@@ -144,7 +149,7 @@ public class TestMoradorRepository {
         morador.setNome("João da Silva");
         morador.setDataNascimento(LocalDate.of(1990, 1, 1));
         morador.setEmail("joao.silva_2@example.com");
-        morador.setCpf(RandomStringUtils.randomNumeric(11));
+        morador.setCpf(gerarCPF());
         morador.setUsername("username_3");
         morador.setPassword("password");
         morador.setApartamento(this.getApartamento());

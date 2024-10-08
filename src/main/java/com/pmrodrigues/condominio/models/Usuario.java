@@ -2,6 +2,7 @@ package com.pmrodrigues.condominio.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,9 +15,11 @@ import java.util.*;
 @Entity
 @Table(name="usuarios")
 @Getter
-@NoArgsConstructor
 @Inheritance(strategy=InheritanceType.JOINED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 public class Usuario implements UserDetails {
 
     @Id
@@ -26,6 +29,7 @@ public class Usuario implements UserDetails {
     @Column(name = "guid", unique = true, nullable = false)
     @Setter(AccessLevel.PRIVATE)
     @EqualsAndHashCode.Include
+    @Builder.Default
     private String guid =  UUID.randomUUID().toString();
 
     @Column(name = "user_name", unique = true, length = 20, nullable = false)
@@ -49,6 +53,7 @@ public class Usuario implements UserDetails {
     private LocalDateTime updatedDate;
 
     @Column(name = "enable" , nullable = false)
+    @Builder.Default
     private final boolean enabled = Boolean.TRUE;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -56,6 +61,7 @@ public class Usuario implements UserDetails {
             joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "perfil_id" , referencedColumnName = "id")
     )
+    @Builder.Default
     private final Set<Perfil> perfis = new HashSet<>();
 
     @PrePersist

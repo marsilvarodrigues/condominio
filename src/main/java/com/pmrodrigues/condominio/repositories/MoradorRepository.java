@@ -14,4 +14,6 @@ public interface MoradorRepository extends JpaRepository<Morador, Long> {
     Optional<Morador> findByCpf(String cpf);
 
     Optional<Morador> findByEmail(String email);
+
+
 }

@@ -59,7 +59,24 @@
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>8.0.1.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator-annotation-processor</artifactId>
+      <version>8.0.1.Final</version>
     </dependency>
 
     <!-- Driver JDBC do MySQL -->
@@ -150,6 +167,8 @@
       <artifactId>jackson-datatype-jsr310</artifactId>
       <version>2.15.2</version> <!-- Certifique-se de usar a mesma versão do Jackson core -->
     </dependency>
+
+
   </dependencies>
 
   <build>

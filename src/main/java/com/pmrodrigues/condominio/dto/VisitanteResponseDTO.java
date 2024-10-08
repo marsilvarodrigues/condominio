@@ -4,11 +4,11 @@ import com.pmrodrigues.condominio.models.Visitante;
 
 import java.time.LocalDateTime;
 
-public record VisitanteDTO (String visitaId, String nomeDoVisitante, LocalDateTime dataDaVisita, VeiculoDTO veiculo, ApartamentoDTO apartamento,
-                            UsuarioDTO registradoPor, MoradorResponseDTO autorizadoPor) {
+public record VisitanteResponseDTO(String visitaId, String nomeDoVisitante, LocalDateTime dataDaVisita, VeiculoDTO veiculo, ApartamentoDTO apartamento,
+                                   UsuarioDTO registradoPor, MoradorResponseDTO autorizadoPor) {
 
-    public static VisitanteDTO fromVisita(Visitante visitante) {
-        return new VisitanteDTO(visitante.getGuid(),
+    public static VisitanteResponseDTO fromVisita(Visitante visitante) {
+        return new VisitanteResponseDTO(visitante.getGuid(),
                 visitante.getNome(),
                 visitante.getDataVisita(),
                 VeiculoDTO.fromVeiculo(visitante.getVeiculo()),

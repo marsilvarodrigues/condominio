@@ -1,9 +1,7 @@
 package com.pmrodrigues.condominio.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +10,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "apartamentos")
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Apartamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

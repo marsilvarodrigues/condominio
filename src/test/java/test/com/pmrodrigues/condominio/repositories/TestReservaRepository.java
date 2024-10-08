@@ -16,6 +16,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static test.com.pmrodrigues.condominio.utils.GeradorCPF.gerarCPF;
 
 @DataJpaTest
 @ContextConfiguration(classes = UsuarioRepository.class)
@@ -47,7 +48,7 @@ public class TestReservaRepository {
         morador.setNome("João da Silva");
         morador.setDataNascimento(LocalDate.of(1990, 1, 1));
         morador.setEmail("joao.silva@example.com");
-        morador.setCpf("12345678900");
+        morador.setCpf(gerarCPF());
         morador.setUsername("username");
         morador.setPassword("password");
         morador.setApartamento(this.getApartamento());

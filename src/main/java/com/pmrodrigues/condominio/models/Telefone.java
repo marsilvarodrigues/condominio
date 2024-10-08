@@ -1,9 +1,7 @@
 package com.pmrodrigues.condominio.models;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -11,6 +9,9 @@ import java.util.UUID;
 @Table(name = "telefones")
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Telefone {
 
     @Id
@@ -18,15 +19,21 @@ public class Telefone {
     private Long id;
 
     @Column(name = "guid", unique = true, nullable = false)
-    private final String guid = UUID.randomUUID().toString();
+    private String guid = UUID.randomUUID().toString();
 
     @EqualsAndHashCode.Include
     @Column(name = "numero", nullable = false)
     @Setter
+    @With
     private String numero;
 
     @JoinColumn(name = "morador_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @Setter
     private Morador morador;
+
+    public Telefone(String numero) {
+
+        this.numero = numero;
+    }
 }

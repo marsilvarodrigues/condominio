@@ -1,10 +1,7 @@
 package com.pmrodrigues.condominio.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,6 +9,9 @@ import java.util.UUID;
 @Table(name = "visitantes")
 @Entity
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Visitante {
 
     @Id

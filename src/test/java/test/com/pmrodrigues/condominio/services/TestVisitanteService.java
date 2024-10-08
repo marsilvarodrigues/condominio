@@ -8,7 +8,6 @@ import com.pmrodrigues.condominio.repositories.MoradorRepository;
 import com.pmrodrigues.condominio.repositories.UsuarioRepository;
 import com.pmrodrigues.condominio.repositories.VisitanteRepository;
 import com.pmrodrigues.condominio.services.VisitanteService;
-import io.cucumber.java.tr.Ve;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,16 +50,12 @@ public class TestVisitanteService {
         val apartamento = new Apartamento();
         apartamento.setBloco(new Bloco());
 
-        val visitante = new VisitanteDTO(null, "nome do visitante",
-                LocalDateTime.now(),
-                null,
-                new ApartamentoDTO(UUID.randomUUID().toString(),
-                        UUID.randomUUID().toString(),
-                        null,
-                        null),
-                new UsuarioDTO(UUID.randomUUID().toString(), null),
-                new MoradorResponseDTO(UUID.randomUUID().toString(), null, null, null, null, null )
-        );
+        val visitante = new VisitanteRequestDTO(null, LocalDateTime.now(),"nome do visitante",
+                new VeiculoDTO(UUID.randomUUID().toString(), "FIT", "BRANCA", "LRH6605", "HONDA"),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString() );
+
         when(apartamentoRepository.findByGuid(any(String.class))).thenReturn(Optional.of(apartamento));
         when(moradorRepository.findByGuid(any(String.class))).thenReturn(Optional.of(new Morador()));
         when(usuarioRepository.findByGuid(any(String.class))).thenReturn(Optional.of(new Usuario()));
@@ -77,16 +72,12 @@ public class TestVisitanteService {
         val apartamento = new Apartamento();
         apartamento.setBloco(new Bloco());
 
-        val visitante = new VisitanteDTO(null, "nome do visitante",
-                LocalDateTime.now(),
+        val visitante = new VisitanteRequestDTO(null, LocalDateTime.now(),"nome do visitante",
                 new VeiculoDTO(UUID.randomUUID().toString(), "FIT", "BRANCA", "LRH6605", "HONDA"),
-                new ApartamentoDTO(UUID.randomUUID().toString(),
-                        UUID.randomUUID().toString(),
-                        null,
-                        null),
-                new UsuarioDTO(UUID.randomUUID().toString(), null),
-                new MoradorResponseDTO(UUID.randomUUID().toString(), null, null, null, null, null )
-        );
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString(),
+                UUID.randomUUID().toString() );
+
         when(apartamentoRepository.findByGuid(any(String.class))).thenReturn(Optional.of(apartamento));
         when(moradorRepository.findByGuid(any(String.class))).thenReturn(Optional.of(new Morador()));
         when(usuarioRepository.findByGuid(any(String.class))).thenReturn(Optional.of(new Usuario()));

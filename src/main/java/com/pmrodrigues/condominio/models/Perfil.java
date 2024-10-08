@@ -1,7 +1,10 @@
 package com.pmrodrigues.condominio.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashSet;
@@ -11,6 +14,9 @@ import java.util.UUID;
 @Entity
 @Table(name="perfis")
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Perfil implements GrantedAuthority {
 
     @Id

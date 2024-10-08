@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.REQUIRED)
 public class ReservaService {
 
     private final ReservaRepository reservaRepository;
@@ -112,6 +115,7 @@ public class ReservaService {
         throw new ReservaNotFoundException();
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<ReservaResponseDTO> pesquisarReservasPorEspacoComum(@NonNull EspacoComumDTO espacoComumDTO) {
 
         val espacoComumn = espacoComumRepository.findByGuid(espacoComumDTO.guid())
