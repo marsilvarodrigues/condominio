@@ -1,6 +1,7 @@
 package com.pmrodrigues.condominio.repositories.specifications;
 
 import com.pmrodrigues.condominio.models.Apartamento;
+import com.pmrodrigues.condominio.models.Bloco;
 import com.pmrodrigues.condominio.models.Morador;
 import jakarta.persistence.criteria.JoinType;
 import lombok.AccessLevel;
@@ -36,7 +37,19 @@ public class SpecificationMorador {
         return (root, criteriaQuery, criteriaBuilder) -> {
             if( apartamento != null ) {
                 val join = root.join("apartamento", JoinType.INNER);
-                return criteriaBuilder.equal(join.get("state"),apartamento);
+                return criteriaBuilder.equal(join.get("apartamentp"),apartamento);
+
+            }else return null;
+        };
+    }
+
+    public static Specification<Morador>bloco(Bloco bloco) {
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            if( bloco != null ) {
+                val join = root.join("apartamento", JoinType.INNER);
+                val blocoJoin = join.join("bloco", JoinType.INNER);
+
+                return criteriaBuilder.equal(blocoJoin.get("bloco"),bloco);
 
             }else return null;
         };

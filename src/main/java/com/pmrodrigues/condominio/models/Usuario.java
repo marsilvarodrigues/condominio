@@ -3,12 +3,16 @@ package com.pmrodrigues.condominio.models;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -65,7 +69,13 @@ public class Usuario implements UserDetails {
     private final Set<Perfil> perfis = new HashSet<>();
 
     @PrePersist
+    @SneakyThrows
     public void preInsert() {
+
+        if( StringUtils.isBlank(this.password) ){
+            this.password = RandomStringUtils.randomAlphanumeric(10);
+        }
+
         this.password =  new BCryptPasswordEncoder().encode(this.password);
         this.createdDate = LocalDateTime.now();
         this.updatedDate = this.createdDate;

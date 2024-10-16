@@ -5,8 +5,8 @@ import com.pmrodrigues.condominio.models.*;
 import com.pmrodrigues.condominio.repositories.CondominioRepository;
 import com.pmrodrigues.condominio.repositories.MoradorRepository;
 import com.pmrodrigues.condominio.repositories.UsuarioRepository;
+import com.pmrodrigues.condominio.repositories.specifications.SpecificationMorador;
 import lombok.val;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -15,10 +15,16 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 
+import static com.pmrodrigues.condominio.repositories.specifications.SpecificationMorador.cpf;
+import static com.pmrodrigues.condominio.repositories.specifications.SpecificationMorador.nome;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.data.jpa.domain.Specification.where;
 import static test.com.pmrodrigues.condominio.utils.GeradorCPF.gerarCPF;
 
 @DataJpaTest
@@ -74,7 +80,7 @@ public class TestMoradorRepository {
 
 
     @Test
-    public void testFindByCpf() {
+    void testFindByCpf() {
         val saved = this.getMorador();
         Optional<Morador> morador = moradorRepository.findByCpf(saved.getCpf());
         assertThat(morador).isPresent();
@@ -82,7 +88,7 @@ public class TestMoradorRepository {
     }
 
     @Test
-    public void testFindByEmail() {
+    void testFindByEmail() {
         this.getMorador();
         Optional<Morador> morador = moradorRepository.findByEmail("joao.silva@example.com");
         assertThat(morador).isPresent();
@@ -90,7 +96,7 @@ public class TestMoradorRepository {
     }
 
     @Test
-    public void testFindByGuid() {
+    void testFindByGuid() {
 
         Morador morador = new Morador();
         morador.setNome("Maria Oliveira");
@@ -108,7 +114,7 @@ public class TestMoradorRepository {
     }
 
     @Test
-    public void testAddTelefone() {
+    void testAddTelefone() {
 
         Telefone telefone = new Telefone();
         telefone.setNumero("1234-5678");
@@ -136,7 +142,7 @@ public class TestMoradorRepository {
     }
 
     @Test
-    public void testRemoveTelefone() {
+    void testRemoveTelefone() {
         // Criar e adicionar dois telefones ao morador
         Telefone telefone1 = new Telefone();
         telefone1.setNumero("1234-5678");
@@ -169,5 +175,53 @@ public class TestMoradorRepository {
         assertThat(foundMorador).isNotNull();
         assertThat(foundMorador.getTelefones()).hasSize(1);
         assertThat(foundMorador.getTelefones().iterator().next().getNumero()).isEqualTo("8765-4321");
+    }
+
+    @Test
+    void devePesquisarMoradoresPorQualquerParametro() {
+
+        var moradores = new ArrayList<Morador>();
+        var apartamento = getApartamento();
+
+        moradores.add( Morador.builder()
+                .nome("João Silva")
+                .dataNascimento(LocalDate.of(1985, 4, 23))
+                .email("joao.silva@example.com")
+                .cpf(gerarCPF())
+                .username("joao.silva@example.com")
+                .apartamento(apartamento)
+                .build());
+
+        moradores.add( Morador.builder()
+                .nome("Maria Souza")
+                .dataNascimento(LocalDate.of(1990, 6, 15))
+                .email("maria.souza@example.com")
+                .cpf(gerarCPF())
+                .username("maria.souza@example.com")
+                .apartamento(apartamento)
+                .build());
+
+        moradores.add( Morador.builder()
+                .nome("Carlos Alves")
+                .dataNascimento(LocalDate.of(1982, 11, 8))
+                .email("carlos.alves@example.com")
+                .cpf(gerarCPF())
+                .username("carlos.alves@example.com")
+                .apartamento(apartamento)
+                .build());
+
+        moradorRepository.saveAll(moradores);
+
+        int randomIndex = ThreadLocalRandom.current().nextInt(moradores.size());
+
+        List<Morador> searched = moradorRepository.findAll(where(cpf(moradores.get(randomIndex).getCpf())));
+        assertThat(searched.isEmpty()).isFalse();
+        assertThat(searched.size()).isEqualTo(1);
+
+        searched = moradorRepository.findAll(where(nome(moradores.get(randomIndex).getNome())));
+        assertThat(searched.isEmpty()).isFalse();
+        assertThat(searched.size()).isEqualTo(1);
+
+
     }
 }
