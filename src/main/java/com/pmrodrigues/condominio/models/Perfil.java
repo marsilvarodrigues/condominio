@@ -1,6 +1,6 @@
 package com.pmrodrigues.condominio.models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

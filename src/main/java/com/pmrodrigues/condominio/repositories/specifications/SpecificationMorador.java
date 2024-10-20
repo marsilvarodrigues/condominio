@@ -3,7 +3,7 @@ package com.pmrodrigues.condominio.repositories.specifications;
 import com.pmrodrigues.condominio.models.Apartamento;
 import com.pmrodrigues.condominio.models.Bloco;
 import com.pmrodrigues.condominio.models.Morador;
-import jakarta.persistence.criteria.JoinType;
+import javax.persistence.criteria.JoinType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.val;

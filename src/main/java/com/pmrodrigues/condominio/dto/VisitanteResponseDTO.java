@@ -3,8 +3,9 @@ package com.pmrodrigues.condominio.dto;
 import com.pmrodrigues.condominio.models.Visitante;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
-public record VisitanteResponseDTO(String visitaId, String nomeDoVisitante, LocalDateTime dataDaVisita, VeiculoDTO veiculo, ApartamentoDTO apartamento,
+public record VisitanteResponseDTO(String visitaId, String nomeDoVisitante, Date dataDaVisita, VeiculoDTO veiculo, ApartamentoDTO apartamento,
                                    UsuarioDTO registradoPor, MoradorResponseDTO autorizadoPor) {
 
     public static VisitanteResponseDTO fromVisita(Visitante visitante) {

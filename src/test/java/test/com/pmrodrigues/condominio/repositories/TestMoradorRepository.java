@@ -15,7 +15,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
@@ -44,7 +46,9 @@ public class TestMoradorRepository {
 
         Morador morador = Morador.builder()
                 .nome("João da Silva")
-                .dataNascimento(LocalDate.of(1990, 1, 1))
+                .dataNascimento(Date.from(
+                        LocalDate.of(1990, 1, 1)
+                                .atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .email("joao.silva@example.com")
                 .cpf(gerarCPF())
                 .username("username")
@@ -100,7 +104,9 @@ public class TestMoradorRepository {
 
         Morador morador = new Morador();
         morador.setNome("Maria Oliveira");
-        morador.setDataNascimento(LocalDate.of(1985, 5, 15));
+        morador.setDataNascimento(Date.from(
+                LocalDate.of(1985, 5, 15)
+                        .atStartOfDay(ZoneId.systemDefault()).toInstant()));
         morador.setEmail("maria.oliveira@example.com");
         morador.setCpf(gerarCPF());
         morador.setUsername("username2");
@@ -122,7 +128,9 @@ public class TestMoradorRepository {
         // Criar e salvar um morador
         Morador morador = new Morador();
         morador.setNome("João da Silva");
-        morador.setDataNascimento(LocalDate.of(1990, 1, 1));
+        morador.setDataNascimento(Date.from(
+                LocalDate.of(1990, 1, 1)
+                        .atStartOfDay(ZoneId.systemDefault()).toInstant()));
         morador.setEmail("joao.silva_2@example.com");
         morador.setCpf(gerarCPF());
         morador.setUsername("username_2");
@@ -153,7 +161,9 @@ public class TestMoradorRepository {
         // Criar e salvar um morador
         Morador morador = new Morador();
         morador.setNome("João da Silva");
-        morador.setDataNascimento(LocalDate.of(1990, 1, 1));
+        morador.setDataNascimento(Date.from(
+                LocalDate.of(1990, 1, 1)
+                        .atStartOfDay(ZoneId.systemDefault()).toInstant()));
         morador.setEmail("joao.silva_2@example.com");
         morador.setCpf(gerarCPF());
         morador.setUsername("username_3");
@@ -185,7 +195,9 @@ public class TestMoradorRepository {
 
         moradores.add( Morador.builder()
                 .nome("João Silva")
-                .dataNascimento(LocalDate.of(1985, 4, 23))
+                .dataNascimento(Date.from(
+                        LocalDate.of(1985, 4, 15)
+                                .atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .email("joao.silva@example.com")
                 .cpf(gerarCPF())
                 .username("joao.silva@example.com")
@@ -194,7 +206,9 @@ public class TestMoradorRepository {
 
         moradores.add( Morador.builder()
                 .nome("Maria Souza")
-                .dataNascimento(LocalDate.of(1990, 6, 15))
+                .dataNascimento(Date.from(
+                        LocalDate.of(1990, 6, 20)
+                                .atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .email("maria.souza@example.com")
                 .cpf(gerarCPF())
                 .username("maria.souza@example.com")
@@ -203,7 +217,9 @@ public class TestMoradorRepository {
 
         moradores.add( Morador.builder()
                 .nome("Carlos Alves")
-                .dataNascimento(LocalDate.of(1982, 11, 8))
+                .dataNascimento(Date.from(
+                        LocalDate.of(1982, 12, 8)
+                                .atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .email("carlos.alves@example.com")
                 .cpf(gerarCPF())
                 .username("carlos.alves@example.com")

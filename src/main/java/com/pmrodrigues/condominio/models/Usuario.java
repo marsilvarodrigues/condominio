@@ -1,6 +1,6 @@
 package com.pmrodrigues.condominio.models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -48,20 +48,20 @@ public class Usuario implements UserDetails {
     @Setter(AccessLevel.PRIVATE)
     @CreatedDate
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate;
+    private Date createdDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Setter(AccessLevel.PRIVATE)
     @LastModifiedDate
     @Column(name = "updated_date", nullable = false)
-    private LocalDateTime updatedDate;
+    private Date updatedDate;
 
     @Column(name = "enable" , nullable = false)
     @Builder.Default
     private final boolean enabled = Boolean.TRUE;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "perfis_usuarios" ,
+    @JoinTable(name = "perfils_usuarios" ,
             joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "perfil_id" , referencedColumnName = "id")
     )
@@ -77,13 +77,13 @@ public class Usuario implements UserDetails {
         }
 
         this.password =  new BCryptPasswordEncoder().encode(this.password);
-        this.createdDate = LocalDateTime.now();
+        this.createdDate = new Date();
         this.updatedDate = this.createdDate;
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.updatedDate = LocalDateTime.now();
+        this.updatedDate = new Date();
     }
 
     @Override
@@ -94,17 +94,17 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
 }

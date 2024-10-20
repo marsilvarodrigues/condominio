@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -50,7 +51,7 @@ public class TestVisitanteService {
         val apartamento = new Apartamento();
         apartamento.setBloco(new Bloco());
 
-        val visitante = new VisitanteRequestDTO(null, LocalDateTime.now(),"nome do visitante",
+        val visitante = new VisitanteRequestDTO(null, new Date(),"nome do visitante",
                 new VeiculoDTO(UUID.randomUUID().toString(), "FIT", "BRANCA", "LRH6605", "HONDA"),
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
@@ -72,7 +73,7 @@ public class TestVisitanteService {
         val apartamento = new Apartamento();
         apartamento.setBloco(new Bloco());
 
-        val visitante = new VisitanteRequestDTO(null, LocalDateTime.now(),"nome do visitante",
+        val visitante = new VisitanteRequestDTO(null, new Date(),"nome do visitante",
                 new VeiculoDTO(UUID.randomUUID().toString(), "FIT", "BRANCA", "LRH6605", "HONDA"),
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),

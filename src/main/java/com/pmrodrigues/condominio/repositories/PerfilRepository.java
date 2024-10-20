@@ -11,5 +11,5 @@ import java.util.UUID;
 @Repository
 public interface PerfilRepository extends JpaRepository<Perfil, Long> {
 
-    Optional<Perfil> findByGuid(UUID uuid);
+    Optional<Perfil> findByGuid(String uuid);
 }

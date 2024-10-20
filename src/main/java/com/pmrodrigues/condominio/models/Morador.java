@@ -1,12 +1,13 @@
 package com.pmrodrigues.condominio.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class Morador extends Usuario{
     @Column(name = "data_de_nascimento", nullable = false)
     @Setter
     @With
-    private LocalDate dataNascimento;
+    private Date dataNascimento;
 
 
     @Column(name = "email", unique = true, nullable = false)

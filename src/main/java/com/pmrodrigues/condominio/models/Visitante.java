@@ -1,9 +1,10 @@
 package com.pmrodrigues.condominio.models;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Table(name = "visitantes")
@@ -34,7 +35,7 @@ public class Visitante {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="data_visita")
     @Setter
-    private LocalDateTime dataVisita = LocalDateTime.now();
+    private Date dataVisita = new Date();
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Setter

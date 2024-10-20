@@ -1,7 +1,10 @@
 package test.com.pmrodrigues.condominio.security.controllers;
 
+import com.pmrodrigues.condominio.security.JwtTokenProvider;
 import com.pmrodrigues.condominio.security.controller.AuthController;
 import com.pmrodrigues.condominio.security.dto.JwtResponse;
+import io.jsonwebtoken.Claims;
+import lombok.val;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +22,8 @@ import org.springframework.security.core.AuthenticationException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,27 +35,22 @@ public class TestAuthController {
     @InjectMocks
     private AuthController authController;
 
-    private final String secretKey = RandomStringUtils.randomAlphanumeric(128);
+    @Mock
+    private JwtTokenProvider jwtTokenProvider;
 
-    private final long validityInMilliseconds = 3600000; // 1 hour
-
-    @BeforeEach
-    void beforeEach() {
-
-        authController.setSecretKey(this.secretKey);
-        authController.setValidityInMilliseconds(this.validityInMilliseconds);
-    }
 
     @Test
     void testAuthenticateSuccess() {
         // Arrange
         String username = "user";
         String password = "password";
+        val claims = mock(Claims.class);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
 
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+        when(authenticationManager.authenticate(authentication))
                 .thenReturn(authentication);
+        when(jwtTokenProvider.generateToken(anyString())).thenReturn("");
 
         // Act
         ResponseEntity<?> response = authController.authenticate(username, password);
@@ -72,7 +72,7 @@ public class TestAuthController {
                 .thenThrow(new AuthenticationException("Invalid credentials") {});
 
         // Act
-        ResponseEntity<?> response = authController.authenticate(username, password);
+        ResponseEntity<JwtResponse> response = authController.authenticate(username, password);
 
         // Assert
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());

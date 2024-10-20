@@ -20,8 +20,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,8 +41,11 @@ public class ReservaService {
         log.info("efetuando a reserva {}",reservaDTO);
 
         LocalDate hoje = LocalDate.now();
+        LocalDate dataReserva = reservaDTO.dataReserva().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
 
-        estaDentroDoPeriodoParaReserva(reservaDTO.dataReserva(), hoje);
+        estaDentroDoPeriodoParaReserva(dataReserva, hoje);
 
         val espacoComumn = espacoComumRepository.findByGuid(reservaDTO.espacaoComum())
                 .orElseThrow(EspacoComumNotFoundException::new);
@@ -78,7 +83,10 @@ public class ReservaService {
         if( reserva.getEspacoComum().equals(espacoComumn) && reserva.getMorador().equals(morador) ) {
 
             LocalDate hoje = LocalDate.now();
-            estaDentroDoPeriodoParaReserva(hoje, reserva.getDataReserva());
+            LocalDate dataReserva = reservaDTO.dataReserva().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            estaDentroDoPeriodoParaReserva(hoje, dataReserva);
 
             reserva.setStatusReserva(StatusReserva.CANCELADO);
             reservaRepository.save(reserva);
@@ -103,7 +111,10 @@ public class ReservaService {
         if( reserva.getEspacoComum().equals(espacoComumn) && reserva.getMorador().equals(morador) ) {
 
             LocalDate hoje = LocalDate.now();
-            estaDentroDoPeriodoParaReserva(hoje, reserva.getDataReserva());
+            LocalDate dataReserva = reserva.getDataReserva().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            estaDentroDoPeriodoParaReserva(hoje, dataReserva);
 
             espacoComumJaReservado(reservaDTO, espacoComumn);
 
@@ -123,9 +134,11 @@ public class ReservaService {
 
         val hoje = LocalDate.now();
         val inicioDoMes = hoje.with(TemporalAdjusters.firstDayOfMonth());
+        val inicio = Date.from(inicioDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
         val fimDoMes = hoje.with(TemporalAdjusters.lastDayOfMonth());
+        val fim = Date.from(fimDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        return reservaRepository.findByEspacoComum(espacoComumn, inicioDoMes, fimDoMes)
+        return reservaRepository.findByEspacoComum(espacoComumn, inicio, fim)
                 .stream()
                 .map(ReservaResponseDTO::fromReserva)
                 .collect(Collectors.toList());

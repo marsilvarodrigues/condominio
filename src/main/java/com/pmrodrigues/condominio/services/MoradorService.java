@@ -13,9 +13,9 @@ import com.pmrodrigues.condominio.repositories.ApartamentoRepository;
 import com.pmrodrigues.condominio.repositories.MoradorRepository;
 import com.pmrodrigues.condominio.repositories.TelefoneRepository;
 import com.pmrodrigues.condominio.utilities.EmailService;
-import jakarta.mail.Address;
-import jakarta.mail.internet.MimeMessage;
-import jakarta.persistence.Table;
+import javax.mail.Address;
+import javax.mail.internet.MimeMessage;
+import javax.persistence.Table;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +26,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.pmrodrigues.condominio.repositories.specifications.SpecificationMorador.*;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
 @Slf4j
@@ -57,6 +60,7 @@ public class MoradorService {
                 .cpf(dto.cpf())
                 .nome(dto.nome())
                 .username(dto.email())
+                .dataNascimento(dto.dataNascimento())
                 .telefones(dto.telefones()
                         .stream()
                         .map(TelefoneDTO::toTelefone)
@@ -121,7 +125,18 @@ public class MoradorService {
 
         log.info("morador {} salvo com sucesso", morador);
 
+    }
 
+    public List<MoradorResponseDTO> pesquisarMorador(MoradorRequestDTO dto) {
+        log.info("pesquisando o morador com os parametros {}", dto);
 
+        val apartamento = apartamentoRepository.findByGuid(dto.apartamento())
+                .orElseThrow(ApartamentoNotFoundException::new);
+
+        return moradorRepository.findAll(where(nome(dto.nome())
+                .and(apartamento(apartamento))
+                .and(bloco(apartamento.getBloco()))))
+                .stream().map(MoradorResponseDTO::fromMorador)
+                .toList();
     }
 }

@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -57,7 +58,7 @@ public class TestVisitanteController {
     @SneakyThrows
     void deveRegistrarAEntradaDeVisitanteComVeiculo() {
 
-        var request = new VisitanteRequestDTO(null, LocalDateTime.now(),
+        var request = new VisitanteRequestDTO(null, new Date(),
                 "/visitante",
                 new VeiculoDTO(null, null ,null, null, null),
                 UUID.randomUUID().toString(),
@@ -67,7 +68,7 @@ public class TestVisitanteController {
         when(service.informarEntradaDeVisitante(any(VisitanteRequestDTO.class))).
                 thenReturn(new VisitanteResponseDTO(UUID.randomUUID().toString(),
                         "visitante",
-                        LocalDateTime.now(),
+                        new Date(),
                         new VeiculoDTO(null, null, null, null ,null ),
                         new ApartamentoDTO(null ,null ,null ,null),
                         new UsuarioDTO(null, null ),
@@ -87,7 +88,7 @@ public class TestVisitanteController {
     @SneakyThrows
     void deveRegistrarAEntradaDeVisitanteSemVeiculo() {
 
-        var request = new VisitanteRequestDTO(null, LocalDateTime.now(),
+        var request = new VisitanteRequestDTO(null, new Date(),
                 "/visitante",
                 null,
                 UUID.randomUUID().toString(),
@@ -97,7 +98,7 @@ public class TestVisitanteController {
         when(service.informarEntradaDeVisitante(any(VisitanteRequestDTO.class))).
                 thenReturn(new VisitanteResponseDTO(UUID.randomUUID().toString(),
                         "visitante",
-                        LocalDateTime.now(),
+                        new Date(),
                         null,
                         new ApartamentoDTO(null ,null ,null ,null),
                         new UsuarioDTO(null, null ),

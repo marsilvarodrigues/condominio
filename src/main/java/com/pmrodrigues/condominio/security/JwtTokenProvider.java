@@ -3,6 +3,8 @@ package com.pmrodrigues.condominio.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,7 +13,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import jakarta.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequest;
+
+import java.security.Key;
 import java.util.Date;
 
 @Component
@@ -24,44 +28,34 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private long validityInMilliseconds;
 
-    private final UserDetailsService userDetailsService;
 
-    public String createToken(Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
+    private Key getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(this.secretKey.replace("-","."));
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
 
+
+    public String generateToken(String username) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setSubject(username)
+                .setExpiration(new Date(System.currentTimeMillis() + validityInMilliseconds))
+                .signWith(SignatureAlgorithm.HS256, getSigningKey())
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-    }
-
-    public String resolveToken(HttpServletRequest req) {
-        return req.getHeader("Authorization");
+    public Claims getClaimsFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(getSigningKey())
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return true;
+            Claims claims = getClaimsFromToken(token);
+            return claims != null && !claims.getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }
-    }
-
-    public String getUsername(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
     }
 }

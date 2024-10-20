@@ -1,10 +1,11 @@
 package com.pmrodrigues.condominio.models;
 
 import com.pmrodrigues.condominio.enums.StatusReserva;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -39,7 +40,7 @@ public class Reserva {
     @Setter
     @Column(name="data_reserva", nullable = false)
     @ToString.Include
-    private LocalDate dataReserva;
+    private Date dataReserva;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name="status_reserva")

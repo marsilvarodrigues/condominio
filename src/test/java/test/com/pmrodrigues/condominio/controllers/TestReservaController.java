@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -70,7 +71,7 @@ public class TestReservaController {
         val request = new ReservaRequestDTO(null,
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
-                LocalDate.now(),
+                new Date(),
                 StatusReserva.RESERVADO);
 
         when(service.efetuarReserva(any(ReservaRequestDTO.class))).thenReturn(new ReservaResponseDTO(null, null, null, null, null ));
@@ -92,7 +93,7 @@ public class TestReservaController {
         val request = new ReservaRequestDTO(null,
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
-                LocalDate.now(),
+                new Date(),
                 StatusReserva.RESERVADO);
 
         when(service.efetuarReserva(any(ReservaRequestDTO.class))).
@@ -114,7 +115,7 @@ public class TestReservaController {
         val request = new ReservaRequestDTO(null,
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
-                LocalDate.now(),
+                new Date(),
                 StatusReserva.RESERVADO);
 
         when(service.efetuarReserva(any(ReservaRequestDTO.class))).
@@ -136,7 +137,7 @@ public class TestReservaController {
         val request = new ReservaRequestDTO(null,
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
-                LocalDate.now(),
+                new Date(),
                 StatusReserva.RESERVADO);
 
         when(service.efetuarReserva(any(ReservaRequestDTO.class))).
@@ -158,7 +159,7 @@ public class TestReservaController {
         val request = new ReservaRequestDTO(null,
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
-                LocalDate.now(),
+                new Date(),
                 StatusReserva.RESERVADO);
 
         when(service.alterarReserva(any(ReservaRequestDTO.class))).thenReturn(new ReservaResponseDTO(null, null, null, null, null ));
@@ -179,7 +180,7 @@ public class TestReservaController {
         val request = new ReservaRequestDTO(null,
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
-                LocalDate.now(),
+                new Date(),
                 StatusReserva.RESERVADO);
 
         when(service.alterarReserva(any(ReservaRequestDTO.class))).thenThrow(ReservaNotFoundException.class);
@@ -200,7 +201,7 @@ public class TestReservaController {
         val request = new ReservaRequestDTO(null,
                 UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
-                LocalDate.now(),
+                new Date(),
                 StatusReserva.RESERVADO);
 
         when(service.alterarReserva(any(ReservaRequestDTO.class))).thenThrow(EstouroDeReservasAtivasException.class);
