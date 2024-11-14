@@ -2,9 +2,7 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/condominio-web">
-      <excludeFolder url="file://$MODULE_DIR$/condominio-web/build" />
-    </content>
+    <content url="file://$MODULE_DIR$/condominio-web" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
