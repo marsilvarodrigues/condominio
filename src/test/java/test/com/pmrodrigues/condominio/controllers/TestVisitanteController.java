@@ -71,7 +71,7 @@ public class TestVisitanteController {
                         new Date(),
                         new VeiculoDTO(null, null, null, null ,null ),
                         new ApartamentoDTO(null ,null ,null ,null),
-                        new UsuarioDTO(null, null, null, null ),
+                        new UsuarioDTO(null, null, null, null, null ),
                         new MoradorResponseDTO(null, null ,null ,null ,null ,null)
                         ));
 
@@ -101,7 +101,7 @@ public class TestVisitanteController {
                         new Date(),
                         null,
                         new ApartamentoDTO(null ,null ,null ,null),
-                        new UsuarioDTO(null, null, null, null ),
+                        new UsuarioDTO(null, null, null, null, null ),
                         new MoradorResponseDTO(null, null ,null ,null ,null ,null)
                 ));
 

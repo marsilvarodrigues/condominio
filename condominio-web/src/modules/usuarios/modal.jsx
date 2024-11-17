@@ -15,11 +15,11 @@ const modalStyle = {
     p: 4,
 };
 
-export default function UsuarioModal({ open, handleClose })  {
+export default function UsuarioModal({ open, handleClose, usuario, onSubmit })  {
     return (
         <Modal open={open} onClose={handleClose}>
             <Box sx={modalStyle}>
-                <Formulario label={{icon: <SaveIcon sx={{mr: 1}}/>, text: "Salvar"}} showPasswordField={true}/>
+                <Formulario label={{icon: <SaveIcon sx={{mr: 1}}/>, text: "Salvar"}} showPasswordField={usuario == null} usuario={usuario} onSubmit={onSubmit}/>
             </Box>
         </Modal>
     )

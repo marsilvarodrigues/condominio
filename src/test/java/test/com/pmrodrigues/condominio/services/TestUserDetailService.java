@@ -27,16 +27,12 @@ public class TestUserDetailService {
 
     @Test
     void testLoadUserByUsername_UserExists() {
-        // Dado
+
         String username = "testuser";
         Usuario usuario = new Usuario(); // Ajuste conforme o seu modelo
         usuario.setUsername(username);
         when(usuarioRepository.findByUsername(username)).thenReturn(Optional.of(usuario));
-
-        // Quando
         UserDetails userDetails = userDetailService.loadUserByUsername(username);
-
-        // Então
         assertEquals(username, userDetails.getUsername());
     }
 

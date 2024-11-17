@@ -60,7 +60,7 @@ public class Usuario implements UserDetails {
     @Builder.Default
     private final boolean enabled = Boolean.TRUE;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Perfil.class)
     @JoinTable(name = "perfils_usuarios" ,
             joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "perfil_id" , referencedColumnName = "id")
@@ -105,6 +105,12 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
+    }
+
+    public void adicionarPerfil(Collection<Perfil> perfis) {
+
+        this.getPerfis().clear();
+        this.perfis.addAll(perfis);
     }
 
 }

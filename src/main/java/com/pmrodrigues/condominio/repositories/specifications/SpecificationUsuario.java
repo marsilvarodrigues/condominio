@@ -1,5 +1,6 @@
 package com.pmrodrigues.condominio.repositories.specifications;
 
+import com.pmrodrigues.condominio.models.Perfil;
 import com.pmrodrigues.condominio.models.Usuario;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -23,11 +24,10 @@ public class SpecificationUsuario {
         };
     }
 
-    public static Specification<Usuario> perfis(List<String> perfis) {
+    public static Specification<Usuario> perfis(List<Perfil> perfis) {
         return (root, query, criteriaBuilder) -> {
             if( perfis!=null && !perfis.isEmpty()) {
-                val join = root.join("perfis", JoinType.INNER);
-                return criteriaBuilder.in(join.get("authority")).value(perfis);
+                return criteriaBuilder.in(root.get("perfis")).value(perfis);
             }
             return null;
         };
