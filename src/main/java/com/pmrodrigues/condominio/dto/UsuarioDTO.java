@@ -1,9 +1,7 @@
 package com.pmrodrigues.condominio.dto;
 
-import com.pmrodrigues.condominio.models.Perfil;
 import com.pmrodrigues.condominio.models.Usuario;
 
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;

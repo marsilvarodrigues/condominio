@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,7 +44,7 @@ public class Morador extends Usuario{
     @With
     private String cpf;
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Telefone.class)
     @JoinColumn(name = "morador_id", referencedColumnName = "id")
     @Builder.Default
     @With
@@ -54,18 +55,10 @@ public class Morador extends Usuario{
     @With
     private Apartamento apartamento;
 
-    public void adicionarTelefone(Telefone telefone) {
-        this.telefones.add(telefone);
-        telefone.setMorador(this);
+    public void adicionarTelefone(Collection<Telefone> telefones) {
+        this.telefones.clear();
+        this.telefones.addAll(telefones);
     }
 
-    @PreUpdate
-    @PrePersist
-    public void preSave() {
-        this.telefones
-            .stream()
-            .filter( t -> t.getMorador() == null)
-            .forEach( t -> t.setMorador(this));
-    }
 
 }

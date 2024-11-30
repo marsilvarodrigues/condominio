@@ -26,6 +26,7 @@ public class EmailService {
     private Collection<String> to = new HashSet<>();
     private String subject;
     private String text;
+    private String from;
 
     public EmailService to(@NonNull @Email String to) {
         this.to.add(to);
@@ -42,11 +43,17 @@ public class EmailService {
         return this;
     }
 
+    public EmailService from(@NonNull String from) {
+        this.from = from;
+        return this;
+    }
+
     @SneakyThrows
     public void send() {
         val message = emailSender.createMimeMessage();
 
         val helper = new MimeMessageHelper(message, UTF_8.toString());
+        helper.setFrom(this.from);
         helper.setSubject(this.subject);
         helper.setText(this.text);
         helper.setTo(this.to.toArray(new String[0]));

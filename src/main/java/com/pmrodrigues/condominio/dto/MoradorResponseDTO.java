@@ -6,10 +6,12 @@ import lombok.NonNull;
 import java.time.LocalDate;
 import java.util.Date;
 
-public record MoradorResponseDTO(String guid, String nome, Date dataNascimento, String email, String cpf, ApartamentoDTO apartamentoDTO) {
+public record MoradorResponseDTO(Long id, String guid, String nome, Date dataNascimento, String email, String cpf, ApartamentoDTO apartamento) {
 
     public static MoradorResponseDTO fromMorador(@NonNull Morador morador) {
-        return new MoradorResponseDTO(morador.getGuid(),
+        return new MoradorResponseDTO(
+                morador.getId(),
+                morador.getGuid(),
                 morador.getNome(),
                 morador.getDataNascimento(),
                 morador.getEmail(),

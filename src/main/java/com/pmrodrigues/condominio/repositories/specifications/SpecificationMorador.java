@@ -47,9 +47,7 @@ public class SpecificationMorador {
         return (root, criteriaQuery, criteriaBuilder) -> {
             if( bloco != null ) {
                 val join = root.join("apartamento", JoinType.INNER);
-                val blocoJoin = join.join("bloco", JoinType.INNER);
-
-                return criteriaBuilder.equal(blocoJoin.get("bloco"),bloco);
+                return criteriaBuilder.equal(join.get("bloco"),bloco);
 
             }else return null;
         };

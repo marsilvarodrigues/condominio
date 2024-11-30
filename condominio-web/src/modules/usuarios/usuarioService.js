@@ -50,37 +50,34 @@ export const excluirUsuario = async(id) => {
         headers: {
             Authorization: `Bearer ${token}`,
         },
-    }).then((response) => {
-        return fetchUsuarios();
-    })
-    .catch((error) => {
+    }).catch((error) => {
             console.log(error)
-        });
+    }).finally(() => {
+        return fetchUsuarios();
+    });
 }
 
 export const pesquisarUsuario = async(usuario) => {
     const token = sessionStorage.getItem("auth_token");
     const params = removeEmptyParams(usuario);
 
-    const response = await axios.get(`http://localhost:5173/api/usuarios`, {
+    return await axios.get(`http://localhost:5173/api/usuarios`, {
         params: params,
         headers: {
             Authorization: `Bearer ${token}`,
         },
-    });
-
-    console.log(response.status)
-
-    if( response && response.data ) {
-        const usuariosFormatados = response.data.map((usuario) => ({
-            ...usuario,
-            dataCriacao: formatarData(usuario.dataCriacao), // Formata a data
-            perfis: [usuario.perfis.map((perfil) => perfil.nome)],
-        }));
-        return usuariosFormatados;
-    }else {
-        console.error(response);
-    }
+    }).then((response) => {
+        if( response && response.data ) {
+            const usuariosFormatados = response.data.map((usuario) => ({
+                ...usuario,
+                dataCriacao: formatarData(usuario.dataCriacao), // Formata a data
+                perfis: [usuario.perfis.map((perfil) => perfil.nome)],
+            }));
+            return usuariosFormatados;
+        }else {
+            console.error(response);
+        }
+    }).catch((error) => console.error(error));
 }
 
 export const salvarUsuario = async(usuario) => {

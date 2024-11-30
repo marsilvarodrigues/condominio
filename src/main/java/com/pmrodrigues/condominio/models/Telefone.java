@@ -27,13 +27,4 @@ public class Telefone {
     @With
     private String numero;
 
-    @JoinColumn(name = "morador_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @Setter
-    private Morador morador;
-
-    public Telefone(String numero) {
-
-        this.numero = numero;
-    }
 }

@@ -37,7 +37,10 @@ function Usuarios() {
     const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
     const navigate = useNavigate();
 
-    const handleOpen = () => setOpen(true);
+    const handleOpen = () => {
+        setUsuarioSelecionado(null);
+        setOpen(true);
+    }
     const handleClose = () => setOpen(false);
 
     useEffect(() => {

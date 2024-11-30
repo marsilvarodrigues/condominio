@@ -55,7 +55,10 @@ export default function Formulario({ label, showPasswordField, usuario, onSubmit
         if (usuario) {
             console.log(usuario);
             setUsername(usuario.username || '');
-            setPerfisSelecionados(usuario.perfis || []);
+            const perfisSelecionadosMapeados = usuario.perfis?.map((perfil) =>
+                perfisDisponiveis.find((p) => p.id === perfil.id)?.nome
+            ).filter(Boolean);
+            setPerfisSelecionados(perfisSelecionadosMapeados || []);
             setUsuarioId(usuario.usuarioId || '');
         } else {
             // Reseta os campos para valores padrão ao criar um novo usuário

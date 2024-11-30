@@ -8,8 +8,6 @@ import com.pmrodrigues.condominio.models.Perfil;
 import com.pmrodrigues.condominio.models.Usuario;
 import com.pmrodrigues.condominio.repositories.PerfilRepository;
 import com.pmrodrigues.condominio.repositories.UsuarioRepository;
-import com.pmrodrigues.condominio.utilities.EmailService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -20,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.pmrodrigues.condominio.repositories.specifications.SpecificationUsuario.*;
+import static com.pmrodrigues.condominio.repositories.specifications.SpecificationUsuario.perfis;
+import static com.pmrodrigues.condominio.repositories.specifications.SpecificationUsuario.usuario;
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
@@ -36,10 +35,11 @@ public class UsuarioService {
     public List<UsuarioDTO> pesquisarUsuarios(UsuarioDTO usuarioDTO) {
 
         log.info("iniciando pesquisa de usuarios com os parametros {}", usuarioDTO);
-        List<Perfil> perfis = perfilRepository.findAllByAuthorityIn(Optional.ofNullable(usuarioDTO.perfis())
-                .orElse(Collections.emptyList()) // Retorna uma lista vazia se perfis() for null
+        List<String> perfis = Optional.ofNullable(usuarioDTO.perfis())
                 .stream()
-                .map(PerfilDTO::nome).toList());
+                .flatMap(Collection::stream)
+                .map(PerfilDTO::nome)
+                .collect(Collectors.toList());
 
         return this.usuarioRepository.findAll(
                 where(usuario(usuarioDTO.username()))
