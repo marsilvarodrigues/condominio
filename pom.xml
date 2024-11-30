@@ -14,7 +14,7 @@
 
   <properties>
     <java.version>17</java.version>
-    <spring-boot.version>3.0.0</spring-boot.version>
+    <spring-boot.version>2.7.18</spring-boot.version>
     <lombok.version>1.18.24</lombok.version>
     <testcontainers.version>1.18.0</testcontainers.version>
     <cucumber.version>7.18.1</cucumber.version>
@@ -45,6 +45,11 @@
   <dependencies>
     <!-- Dependências do Spring Boot -->
     <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.17.0</version>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
@@ -59,7 +64,24 @@
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>8.0.1.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator-annotation-processor</artifactId>
+      <version>8.0.1.Final</version>
     </dependency>
 
     <!-- Driver JDBC do MySQL -->
@@ -150,6 +172,8 @@
       <artifactId>jackson-datatype-jsr310</artifactId>
       <version>2.15.2</version> <!-- Certifique-se de usar a mesma versão do Jackson core -->
     </dependency>
+
+
   </dependencies>
 
   <build>

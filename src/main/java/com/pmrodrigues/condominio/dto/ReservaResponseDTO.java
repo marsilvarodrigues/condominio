@@ -5,8 +5,9 @@ import com.pmrodrigues.condominio.models.Reserva;
 import lombok.NonNull;
 
 import java.time.LocalDate;
+import java.util.Date;
 
-public record ReservaResponseDTO(String reservaId, EspacoComumDTO espacaoComum, MoradorResponseDTO morador, LocalDate dataReserva,
+public record ReservaResponseDTO(String reservaId, EspacoComumDTO espacaoComum, MoradorResponseDTO morador, Date dataReserva,
                                  StatusReserva statusReserva) {
 
     public static ReservaResponseDTO fromReserva(@NonNull Reserva reserva) {

@@ -1,8 +1,8 @@
 package com.pmrodrigues.condominio.services;
 
 import com.pmrodrigues.condominio.dto.ApartamentoDTO;
-import com.pmrodrigues.condominio.dto.VeiculoDTO;
-import com.pmrodrigues.condominio.dto.VisitanteDTO;
+import com.pmrodrigues.condominio.dto.VisitanteRequestDTO;
+import com.pmrodrigues.condominio.dto.VisitanteResponseDTO;
 import com.pmrodrigues.condominio.exceptions.ApartamentoNotFoundException;
 import com.pmrodrigues.condominio.exceptions.MoradorNotFoundException;
 import com.pmrodrigues.condominio.exceptions.UsuarioNotFoundException;
@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.REQUIRED)
 public class VisitanteService {
 
     private final VisitanteRepository visitanteRepository;
@@ -34,15 +37,15 @@ public class VisitanteService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public VisitanteDTO informarEntradaDeVisitante(@NonNull VisitanteDTO visitante) {
+    public VisitanteResponseDTO informarEntradaDeVisitante(@NonNull VisitanteRequestDTO visitante) {
 
         log.info("informando a entrada do visitante {}", visitante);
 
-        val apartamento = apartamentoRepository.findByGuid(visitante.apartamento().apartamentoId())
+        val apartamento = apartamentoRepository.findByGuid(visitante.apartamento())
                 .orElseThrow(ApartamentoNotFoundException::new);
-        val morador = moradorRepository.findByGuid(visitante.autorizadoPor().guid())
+        val morador = moradorRepository.findByGuid(visitante.autorizadoPor())
                 .orElseThrow(MoradorNotFoundException::new);
-        val porteiro = usuarioRepository.findByGuid(visitante.registradoPor().usuarioId())
+        val porteiro = usuarioRepository.findByGuid(visitante.registradoPor())
                 .orElseThrow(UsuarioNotFoundException::new);
 
         val novaVisita = new Visitante();
@@ -63,18 +66,19 @@ public class VisitanteService {
 
         visitanteRepository.save(novaVisita);
 
-        return VisitanteDTO.fromVisita(novaVisita);
+        return VisitanteResponseDTO.fromVisita(novaVisita);
 
     }
 
-    public List<VisitanteDTO> recuperarVisitantesPorApartamento(@NonNull  ApartamentoDTO dto) {
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<VisitanteResponseDTO> recuperarVisitantesPorApartamento(@NonNull  ApartamentoDTO dto) {
         log.info("listando todas as visitas do apartamento {}", dto);
         val apartamento = apartamentoRepository.findByGuid(dto.apartamentoId())
                 .orElseThrow(ApartamentoNotFoundException::new);
 
         return visitanteRepository.findByApartamento(apartamento)
                 .stream()
-                .map(VisitanteDTO::fromVisita)
+                .map(VisitanteResponseDTO::fromVisita)
                 .collect(Collectors.toList());
     }
 }

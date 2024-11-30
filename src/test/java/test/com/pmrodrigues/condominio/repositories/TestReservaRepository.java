@@ -12,10 +12,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static test.com.pmrodrigues.condominio.utils.GeradorCPF.gerarCPF;
 
 @DataJpaTest
 @ContextConfiguration(classes = UsuarioRepository.class)
@@ -45,9 +48,11 @@ public class TestReservaRepository {
 
         Morador morador = new Morador();
         morador.setNome("João da Silva");
-        morador.setDataNascimento(LocalDate.of(1990, 1, 1));
+        morador.setDataNascimento(Date.from(
+                LocalDate.of(1990, 1, 1)
+                        .atStartOfDay(ZoneId.systemDefault()).toInstant()));
         morador.setEmail("joao.silva@example.com");
-        morador.setCpf("12345678900");
+        morador.setCpf(gerarCPF());
         morador.setUsername("username");
         morador.setPassword("password");
         morador.setApartamento(this.getApartamento());
@@ -94,7 +99,7 @@ public class TestReservaRepository {
         espacoComumRepository.save(espacoComum);
 
         Reserva reserva = new Reserva();
-        reserva.setDataReserva(LocalDate.now());
+        reserva.setDataReserva(new Date());
         reserva.setMorador(this.getMorador());
         reserva.setStatusReserva(StatusReserva.RESERVADO);
         reserva.setEspacoComum(espacoComum);
@@ -132,7 +137,7 @@ public class TestReservaRepository {
         espacoComum.setCondominio(condominio);
 
         espacoComumRepository.save(espacoComum);
-        LocalDate dataReserva = LocalDate.now();
+        Date dataReserva = new Date();
 
         Reserva reserva = new Reserva();
         reserva.setDataReserva(dataReserva);
@@ -164,7 +169,7 @@ public class TestReservaRepository {
         espacoComumRepository.save(espacoComum);
 
         Reserva reserva = new Reserva();
-        reserva.setDataReserva(LocalDate.now());
+        reserva.setDataReserva(new Date());
         reserva.setMorador(morador);
         reserva.setStatusReserva(StatusReserva.RESERVADO);
         reserva.setEspacoComum(espacoComum);
@@ -193,15 +198,15 @@ public class TestReservaRepository {
         LocalDate dataReserva = LocalDate.now();
 
         Reserva reserva = new Reserva();
-        reserva.setDataReserva(dataReserva);
+        reserva.setDataReserva(Date.from(dataReserva.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         reserva.setMorador(morador);
         reserva.setStatusReserva(StatusReserva.RESERVADO);
         reserva.setEspacoComum(espacoComum);
 
         reservaRepository.save(reserva);
 
-        val inicioDoMes = dataReserva.with(TemporalAdjusters.firstDayOfMonth());
-        val fimDoMes = dataReserva.with(TemporalAdjusters.lastDayOfMonth());
+        val inicioDoMes =Date.from(dataReserva.with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        val fimDoMes = Date.from(dataReserva.with(TemporalAdjusters.lastDayOfMonth()).atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         val founded = reservaRepository.findByEspacoComum(espacoComum, inicioDoMes, fimDoMes);
 

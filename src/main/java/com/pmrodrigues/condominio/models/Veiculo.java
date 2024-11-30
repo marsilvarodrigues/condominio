@@ -1,10 +1,7 @@
 package com.pmrodrigues.condominio.models;
 
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -12,6 +9,9 @@ import java.util.UUID;
 @Table(name="veiculo_do_visitante")
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Veiculo {
 
     @Id

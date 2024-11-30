@@ -15,6 +15,7 @@ import com.pmrodrigues.condominio.repositories.MoradorRepository;
 import com.pmrodrigues.condominio.repositories.ReservaRepository;
 import com.pmrodrigues.condominio.services.ReservaService;
 import lombok.val;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -55,9 +58,10 @@ public class TestReservaService {
         when(espacoComumRepository.findByGuid(any(String.class))).thenReturn(Optional.of(espacoComum));
         when(moradorRepository.findByGuid(any(String.class))).thenReturn(Optional.of(morador));
         when(reservaRepository.quantasReservasAtivasExistemParaOMorador(any(Morador.class))).thenReturn(0L);
-        when(reservaRepository.findByEspacoComumDataReserva(any(EspacoComum.class), any(LocalDate.class), any(StatusReserva.class))).thenReturn(Optional.empty());
+        when(reservaRepository.findByEspacoComumDataReserva(any(EspacoComum.class), any(Date.class), any(StatusReserva.class))).thenReturn(Optional.empty());
 
-        val saved = reservaService.efetuarReserva(new ReservaRequestDTO(null, UUID.randomUUID().toString(), UUID.randomUUID().toString(), LocalDate.now().minusDays(1), null));
+        val saved = reservaService.efetuarReserva(new ReservaRequestDTO(null, UUID.randomUUID().toString(), UUID.randomUUID().toString(),
+                Date.from(LocalDate.now().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()), null));
 
         verify(reservaRepository).save(any(Reserva.class));
         assertThat(saved.reservaId()).isNotNull();
@@ -67,7 +71,7 @@ public class TestReservaService {
     @Test
     public void soPodeReservarCom24DeAntecedencia() {
         assertThrows(ForaDoPrazoParaReservarException.class, () ->
-                reservaService.efetuarReserva(new ReservaRequestDTO(null, UUID.randomUUID().toString(), UUID.randomUUID().toString(), LocalDate.now(), null))
+                reservaService.efetuarReserva(new ReservaRequestDTO(null, UUID.randomUUID().toString(), UUID.randomUUID().toString(), new Date(), null))
                 );
     }
 
@@ -81,7 +85,7 @@ public class TestReservaService {
 
         reserva.setEspacoComum(espacoComum);
         reserva.setMorador(morador);
-        reserva.setDataReserva(LocalDate.now().plusDays(1));
+        reserva.setDataReserva(Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
 
         when(espacoComumRepository.findByGuid(any(String.class))).thenReturn(Optional.of(espacoComum));
@@ -106,7 +110,7 @@ public class TestReservaService {
         when(reservaRepository.quantasReservasAtivasExistemParaOMorador(any(Morador.class))).thenReturn(2L);
 
         assertThrows(EstouroDeReservasAtivasException.class, () ->
-                reservaService.efetuarReserva(new ReservaRequestDTO(null, UUID.randomUUID().toString(), UUID.randomUUID().toString(), LocalDate.now().minusDays(1), null))
+                reservaService.efetuarReserva(new ReservaRequestDTO(null, UUID.randomUUID().toString(), UUID.randomUUID().toString(), Date.from(LocalDate.now().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()), null))
         );
 
     }
@@ -121,10 +125,10 @@ public class TestReservaService {
         when(espacoComumRepository.findByGuid(any(String.class))).thenReturn(Optional.of(espacoComum));
         when(moradorRepository.findByGuid(any(String.class))).thenReturn(Optional.of(morador));
         when(reservaRepository.quantasReservasAtivasExistemParaOMorador(any(Morador.class))).thenReturn(0L);
-        when(reservaRepository.findByEspacoComumDataReserva(any(EspacoComum.class), any(LocalDate.class), any(StatusReserva.class))).thenReturn(Optional.of(reserva));
+        when(reservaRepository.findByEspacoComumDataReserva(any(EspacoComum.class), any(Date.class), any(StatusReserva.class))).thenReturn(Optional.of(reserva));
 
         assertThrows(EspacoBloqueadoParaException.class, () ->
-                reservaService.efetuarReserva(new ReservaRequestDTO(null, UUID.randomUUID().toString(), UUID.randomUUID().toString(), LocalDate.now().minusDays(1), null))
+                reservaService.efetuarReserva(new ReservaRequestDTO(null, UUID.randomUUID().toString(), UUID.randomUUID().toString(), Date.from(LocalDate.now().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()), null))
         );
 
     }
@@ -138,7 +142,7 @@ public class TestReservaService {
 
         reserva.setEspacoComum(espacoComum);
         reserva.setMorador(morador);
-        reserva.setDataReserva(LocalDate.now());
+        reserva.setDataReserva(new Date());
 
         when(espacoComumRepository.findByGuid(any(String.class))).thenReturn(Optional.of(espacoComum));
         when(moradorRepository.findByGuid(any(String.class))).thenReturn(Optional.of(morador));
@@ -159,15 +163,22 @@ public class TestReservaService {
 
         reserva.setEspacoComum(espacoComum);
         reserva.setMorador(morador);
-        reserva.setDataReserva(LocalDate.now().plusDays(1));
+        reserva.setDataReserva(Date.from(LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
 
         when(espacoComumRepository.findByGuid(any(String.class))).thenReturn(Optional.of(espacoComum));
         when(moradorRepository.findByGuid(any(String.class))).thenReturn(Optional.of(morador));
         when(reservaRepository.findByGuid(any(String.class))).thenReturn(Optional.of(reserva));
 
-        val saved = reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), reserva.getDataReserva().plusDays(5), reserva.getStatusReserva()));
-        assertThat(saved.dataReserva()).isEqualTo(LocalDate.now().plusDays(6));
+        Date dataReserva = DateUtils.addDays(reserva.getDataReserva(),5);
+
+        val saved = reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), dataReserva, reserva.getStatusReserva()));
+        assertThat(saved.dataReserva()).isEqualTo(Date.from(
+                LocalDate.now()
+                        .plusDays(6)
+                        .atStartOfDay(ZoneId.systemDefault())
+                        .toInstant())
+        );
 
         verify(reservaRepository).save(any(Reserva.class));
 
@@ -182,14 +193,14 @@ public class TestReservaService {
 
         reserva.setEspacoComum(espacoComum);
         reserva.setMorador(morador);
-        reserva.setDataReserva(LocalDate.now());
+        reserva.setDataReserva(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
 
         when(espacoComumRepository.findByGuid(any(String.class))).thenReturn(Optional.of(espacoComum));
         when(moradorRepository.findByGuid(any(String.class))).thenReturn(Optional.of(morador));
         when(reservaRepository.findByGuid(any(String.class))).thenReturn(Optional.of(reserva));
 
-        assertThrows(ForaDoPrazoParaReservarException.class, () -> reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), reserva.getDataReserva().plusDays(5), reserva.getStatusReserva())));
+        assertThrows(ForaDoPrazoParaReservarException.class, () -> reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), DateUtils.addDays(reserva.getDataReserva(), 1), reserva.getStatusReserva())));
 
     }
 
@@ -201,10 +212,10 @@ public class TestReservaService {
 
         reserva.setEspacoComum(espacoComum);
         reserva.setMorador(morador);
-        reserva.setDataReserva(LocalDate.now());
+        reserva.setDataReserva(new Date());
         reserva.setStatusReserva(StatusReserva.PAGO);
 
-        assertThrows(AlteracaoNaoPermitadaException.class, () -> reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), reserva.getDataReserva().plusDays(5), reserva.getStatusReserva())));
+        assertThrows(AlteracaoNaoPermitadaException.class, () -> reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), DateUtils.addDays(reserva.getDataReserva(), 5), reserva.getStatusReserva())));
     }
 
     @Test
@@ -216,15 +227,15 @@ public class TestReservaService {
 
         reserva.setEspacoComum(espacoComum);
         reserva.setMorador(morador);
-        reserva.setDataReserva(LocalDate.now().plusDays(1));
+        reserva.setDataReserva(DateUtils.addDays(new Date(), 1));
 
         when(espacoComumRepository.findByGuid(any(String.class))).thenReturn(Optional.of(espacoComum));
         when(moradorRepository.findByGuid(any(String.class))).thenReturn(Optional.of(morador));
         when(reservaRepository.findByGuid(any(String.class))).thenReturn(Optional.of(reserva));
-        when(reservaRepository.findByEspacoComumDataReserva(any(EspacoComum.class), any(LocalDate.class), any(StatusReserva.class))).thenReturn(Optional.of(new Reserva()));
+        when(reservaRepository.findByEspacoComumDataReserva(any(EspacoComum.class), any(Date.class), any(StatusReserva.class))).thenReturn(Optional.of(new Reserva()));
 
         assertThrows(EspacoBloqueadoParaException.class, () ->
-                reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), reserva.getDataReserva().plusDays(5), reserva.getStatusReserva()))
+                reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), DateUtils.addDays(reserva.getDataReserva(),5), reserva.getStatusReserva()))
         );
 
     }
@@ -237,10 +248,10 @@ public class TestReservaService {
 
         reserva.setEspacoComum(espacoComum);
         reserva.setMorador(morador);
-        reserva.setDataReserva(LocalDate.now());
+        reserva.setDataReserva(new Date());
         reserva.setStatusReserva(StatusReserva.PAGO);
 
-        assertThrows(AlteracaoNaoPermitadaException.class, () -> reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), reserva.getDataReserva().plusDays(5), reserva.getStatusReserva())));
+        assertThrows(AlteracaoNaoPermitadaException.class, () -> reservaService.alterarReserva(new ReservaRequestDTO(reserva.getGuid(), espacoComum.getGuid(), morador.getGuid(), DateUtils.addDays(reserva.getDataReserva(),5), reserva.getStatusReserva())));
     }
 
     @Test
@@ -249,7 +260,7 @@ public class TestReservaService {
         val reservas = mock(List.class);
         val espacoComum = new EspacoComum();
         when(espacoComumRepository.findByGuid(any(String.class))).thenReturn(Optional.of(espacoComum));
-        when(reservaRepository.findByEspacoComum(any(EspacoComum.class), any(LocalDate.class), any(LocalDate.class))).thenReturn(reservas);
+        when(reservaRepository.findByEspacoComum(any(EspacoComum.class), any(Date.class), any(Date.class))).thenReturn(reservas);
 
         val founded = reservaService.pesquisarReservasPorEspacoComum(new EspacoComumDTO(UUID.randomUUID().toString(), null, null, 10));
         assertThat(founded).isNotNull();

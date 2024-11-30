@@ -2,8 +2,6 @@ package test.com.pmrodrigues.condominio.repositories;
 
 import com.pmrodrigues.condominio.models.*;
 import com.pmrodrigues.condominio.repositories.*;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.val;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
@@ -12,17 +10,17 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.shaded.org.apache.commons.lang3.RandomStringUtils;
 
 import java.time.LocalDate;
-import java.util.IntSummaryStatistics;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
+import static test.com.pmrodrigues.condominio.utils.GeradorCPF.gerarCPF;
 
 @DataJpaTest
 @ContextConfiguration(classes = UsuarioRepository.class)
@@ -52,9 +50,11 @@ public class TestVisitanteRepository {
 
         Morador morador = new Morador();
         morador.setNome("João da Silva");
-        morador.setDataNascimento(LocalDate.of(1990, 1, 1));
+        morador.setDataNascimento(Date.from(
+                LocalDate.of(1990, 1, 1)
+                        .atStartOfDay(ZoneId.systemDefault()).toInstant()));
         morador.setEmail("joao.silva@example.com");
-        morador.setCpf("12345678900");
+        morador.setCpf(gerarCPF());
         morador.setUsername("morador");
         morador.setPassword("password");
         morador.setApartamento(this.getApartamento());
