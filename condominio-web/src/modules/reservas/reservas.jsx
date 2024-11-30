@@ -71,7 +71,6 @@ const Reserva = () => {
                     flexDirection: 'column',
                     justifyContent: 'flex-start', // Alinha no topo
                     minHeight: '90vh', // Garante que o container tenha a altura da tela
-                    paddingTop: 15, // Garante que não haja padding no topo
                 }}
             >
 
