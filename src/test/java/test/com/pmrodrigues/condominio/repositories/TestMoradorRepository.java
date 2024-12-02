@@ -139,7 +139,7 @@ public class TestMoradorRepository {
 
         moradorRepository.save(morador);
 
-        morador.adicionarTelefone(telefone);
+        morador.adicionarTelefone(List.of(telefone));
         moradorRepository.save(morador);
 
         // Verificar se o telefone foi adicionado
@@ -172,8 +172,7 @@ public class TestMoradorRepository {
 
         moradorRepository.save(morador);
 
-        morador.adicionarTelefone(telefone1);
-        morador.adicionarTelefone(telefone2);
+        morador.adicionarTelefone(List.of(telefone1, telefone2));
         moradorRepository.save(morador);
 
         // Remover um telefone

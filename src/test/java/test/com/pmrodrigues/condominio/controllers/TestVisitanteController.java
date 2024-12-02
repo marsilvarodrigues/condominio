@@ -72,7 +72,7 @@ public class TestVisitanteController {
                         new VeiculoDTO(null, null, null, null ,null ),
                         new ApartamentoDTO(null ,null ,null ,null),
                         new UsuarioDTO(null, null, null, null, null ),
-                        new MoradorResponseDTO(null, null ,null ,null ,null ,null)
+                        new MoradorResponseDTO(null, null ,null ,null ,null ,null, null)
                         ));
 
         mvc.perform(post("/visitantes")
@@ -102,7 +102,7 @@ public class TestVisitanteController {
                         null,
                         new ApartamentoDTO(null ,null ,null ,null),
                         new UsuarioDTO(null, null, null, null, null ),
-                        new MoradorResponseDTO(null, null ,null ,null ,null ,null)
+                        new MoradorResponseDTO(null, null ,null ,null ,null ,null, null)
                 ));
 
         mvc.perform(post("/visitantes")

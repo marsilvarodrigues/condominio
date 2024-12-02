@@ -45,7 +45,7 @@ public class Morador extends Usuario{
     private String cpf;
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL, targetEntity = Telefone.class)
-    @JoinColumn(name = "morador_id", referencedColumnName = "id")
+    @JoinColumn(name = "morador_id", referencedColumnName = "id", nullable = false)
     @Builder.Default
     @With
     private final Set<Telefone> telefones = new HashSet<>();

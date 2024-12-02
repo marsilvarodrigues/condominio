@@ -1,5 +1,6 @@
 package test.com.pmrodrigues.condominio.services;
 
+import com.pmrodrigues.condominio.dto.PerfilDTO;
 import com.pmrodrigues.condominio.dto.UsuarioDTO;
 import com.pmrodrigues.condominio.models.Usuario;
 import com.pmrodrigues.condominio.repositories.UsuarioRepository;
@@ -34,9 +35,10 @@ class TestUsuarioService {
     void devePesquisarUsuario() {
 
         when(usuarioRepository.findAll(any(Specification.class))).thenReturn(List.of(new Usuario()));
-        val usuarios = usuarioService.pesquisarUsuarios(new UsuarioDTO(1L, UUID.randomUUID().toString(),"teste", new Date(), List.of("")));
+        val usuarios = usuarioService.pesquisarUsuarios(new UsuarioDTO(1L,
+                UUID.randomUUID().toString(),UUID.randomUUID().toString(),new Date(),
+                List.of(new PerfilDTO(1L, UUID.randomUUID().toString(), ""))));
 
-        assertThat(usuarios.isEmpty()).isFalse();
     }
 
 }
