@@ -5,6 +5,7 @@ import com.pmrodrigues.condominio.dto.MoradorResponseDTO;
 import com.pmrodrigues.condominio.dto.TelefoneDTO;
 import com.pmrodrigues.condominio.models.*;
 import com.pmrodrigues.condominio.repositories.ApartamentoRepository;
+import com.pmrodrigues.condominio.repositories.BlocoRepository;
 import com.pmrodrigues.condominio.repositories.MoradorRepository;
 import com.pmrodrigues.condominio.repositories.TelefoneRepository;
 import com.pmrodrigues.condominio.services.MoradorService;
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
@@ -28,6 +31,7 @@ import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class TestMoradorService {
 
     @Mock
@@ -38,6 +42,9 @@ public class TestMoradorService {
 
     @Mock
     private TelefoneRepository telefoneRepository;
+
+    @Mock
+    private BlocoRepository blocoRepository;
 
     @Mock
     private EmailService emailService;
@@ -58,6 +65,7 @@ public class TestMoradorService {
                 ).email("teste@teste.com")
                 .build();
 
+        when(emailService.from(anyString())).thenReturn(emailService);
         when(emailService.to(anyString())).thenReturn(emailService);
         when(emailService.subject(anyString())).thenReturn(emailService);
         when(emailService.text(anyString())).thenReturn(emailService);
@@ -67,6 +75,7 @@ public class TestMoradorService {
 
         service.cadastrarNovoMorador(new MoradorRequestDTO(null,
                 "email",
+                UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
                 "morador",
                 "cpf",
@@ -80,11 +89,12 @@ public class TestMoradorService {
     @Test
     void deveAtualizarDadosMoradorAdicionandoNumeroNovo() {
 
-        when(apartamentoRepository.findByGuid(anyString())).thenReturn(Optional.of(new Apartamento()));
+        when(apartamentoRepository.findByGuid(anyString())).thenReturn(Optional.of(new Apartamento(null, null, null, null, new Bloco(), null)));
         when(moradorRepository.findByGuid(anyString())).thenReturn(Optional.of(new Morador()));
 
         service.atualizarDadosMorador(new MoradorRequestDTO(UUID.randomUUID().toString(),
                 "email",
+                UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
                 "morador",
                 "cpf",
@@ -100,15 +110,16 @@ public class TestMoradorService {
 
         val telefoneId = UUID.randomUUID().toString();
         val morador = Morador.builder().build();
-        morador.adicionarTelefone(Telefone.builder().guid(telefoneId).build());
+        morador.adicionarTelefone(List.of(Telefone.builder().guid(telefoneId).build()));
 
+        when(apartamentoRepository.findByGuid(anyString())).thenReturn(Optional.of(new Apartamento(null, null, null, null, new Bloco(), null)));
 
-        when(apartamentoRepository.findByGuid(anyString())).thenReturn(Optional.of(new Apartamento()));
         when(moradorRepository.findByGuid(anyString())).thenReturn(Optional.of(morador));
         when(telefoneRepository.findByGuid(anyString())).thenReturn(Optional.of(Telefone.builder().guid(telefoneId).build()));
 
         service.atualizarDadosMorador(new MoradorRequestDTO(UUID.randomUUID().toString(),
                 "email",
+                UUID.randomUUID().toString(),
                 UUID.randomUUID().toString(),
                 "morador",
                 "cpf",
@@ -122,8 +133,9 @@ public class TestMoradorService {
     @Test
     void devePesquisarDadosMorador() {
 
-        val morador = new MoradorRequestDTO(null,null,UUID.randomUUID().toString(),"teste", null, null,null);
+        val morador = new MoradorRequestDTO(null,null,UUID.randomUUID().toString(),UUID.randomUUID().toString(),"teste", null, null,null);
         when(apartamentoRepository.findByGuid(anyString())).thenReturn(Optional.of(new Apartamento()));
+        when(blocoRepository.findByGuid(anyString())).thenReturn(Optional.of(new Bloco()));
         when(moradorRepository.findAll(any(Specification.class))).thenReturn(List.of(new Morador()));
 
         List<MoradorResponseDTO> moradores = service.pesquisarMorador(morador);
